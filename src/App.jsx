@@ -25,8 +25,10 @@ import {
   Mail,
   Phone,
   Signal,
-  Cpu,
   History,
+  Camera,
+  PlayCircle,
+  Star,
   AlertTriangle,
   Zap,
   Navigation,
@@ -133,18 +135,22 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Toggle (Solo visible en móviles) */}
-        <button 
+        <button
           className="md:hidden text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
         >
-          {mobileMenuOpen ? <X /> : <Menu />}
+          {mobileMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div 
+          <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -198,11 +204,15 @@ const Hero = () => {
       
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop" 
+        <img
+          src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=70&w=1600&auto=format&fit=crop"
           alt="Motocicleta de noche"
           className="w-full h-full object-cover opacity-40"
-          onError={(e) => e.target.style.display = 'none'} 
+          width="1600"
+          height="1067"
+          fetchpriority="high"
+          decoding="async"
+          onError={(e) => e.target.style.display = 'none'}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#02255b]/90 via-[#02255b]/70 to-[#02255b]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#02255b]/40 to-[#02255b]" />
@@ -241,19 +251,24 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.span 
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="inline-block py-2 px-6 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs md:text-sm font-bold tracking-widest mb-8 uppercase backdrop-blur-md shadow-[0_0_20px_rgba(159,228,63,0.1)] hover:shadow-[0_0_30px_rgba(159,228,63,0.2)] transition-all"
+            className="flex flex-wrap justify-center items-center gap-3 mb-8"
           >
-            <motion.span
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="inline-block w-2 h-2 bg-[#9fe43f] rounded-full mr-2"
-            />
-            Taller de instalación propio en Córdoba Capital
-          </motion.span>
+            <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f] text-[#02255b] text-xs md:text-sm font-black tracking-widest uppercase shadow-[0_0_20px_rgba(159,228,63,0.3)]">
+              ★ +300 motos protegidas en Córdoba
+            </span>
+            <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs md:text-sm font-bold tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(159,228,63,0.1)]">
+              <motion.span
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="inline-block w-2 h-2 bg-[#9fe43f] rounded-full mr-2"
+              />
+              Taller de instalación propio
+            </span>
+          </motion.div>
           
           <h1 className="mb-10 font-black text-white tracking-tight">
             {/* LÍNEA 1: TÍTULO PRINCIPAL (Rastreo) */}
@@ -293,8 +308,9 @@ const Hero = () => {
             transition={{ delay: 0.7 }}
             className="text-gray-100 text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed font-medium"
           >
-            Mantené tu moto siempre localizada y bajo control, con alertas Instantáneas y Corte de Corriente remoto. Sumate a la comunidad que elige seguridad inteligente mediante una suscripción simple y diseñada a tu medida.    <span className="text-[#9fe43f] font-bold relative">
-              
+            Tu moto te avisa si alguien la toca. Vos la ves en el mapa y la apagás desde el celular.{" "}
+            <span className="text-[#9fe43f] font-bold relative whitespace-nowrap">
+              El control lo tenés vos
               <motion.span
                 className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#9fe43f]"
                 initial={{ scaleX: 0 }}
@@ -302,6 +318,7 @@ const Hero = () => {
                 transition={{ delay: 1.2, duration: 0.6 }}
               />
             </span>
+            , no el que se la quiere llevar.
           </motion.p>
 
           <motion.div 
@@ -344,54 +361,57 @@ const Hero = () => {
   );
 };
 
-// --- BRAND MARQUEE (MEJORADO) ---
+// --- BRAND MARQUEE (LOGOS + WORDMARKS) ---
 const BrandMarquee = () => {
   const brands = [
-    "HONDA", "YAMAHA", "KAWASAKI", "BENELLI", "KTM", "DUCATI", "BAJAJ", "BMW", "ROYAL ENFIELD", "SUZUKI", "MOTOMEL", "ZANELLA"
+    { name: "HONDA", logo: "/brands/honda.svg" },
+    { name: "YAMAHA", logo: "/brands/yamaha.svg" },
+    { name: "KAWASAKI" },
+    { name: "BENELLI" },
+    { name: "KTM", logo: "/brands/ktm.svg" },
+    { name: "DUCATI", logo: "/brands/ducati.svg" },
+    { name: "BAJAJ" },
+    { name: "BMW", logo: "/brands/bmw.svg" },
+    { name: "ROYAL ENFIELD" },
+    { name: "SUZUKI", logo: "/brands/suzuki.svg" },
+    { name: "MOTOMEL" },
+    { name: "ZANELLA" },
   ];
 
   return (
-    <div className="w-full bg-[#011a42] border-y border-white/5 py-10 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#011a42] via-transparent to-[#011a42] z-10 pointer-events-none"></div>
-      
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-5" 
-           style={{ 
-             backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', 
-             backgroundSize: '50px 50px' 
-           }}
-      />
-      
-      <div className="flex gap-16 animate-marquee whitespace-nowrap">
-        {[...brands, ...brands, ...brands].map((brand, index) => (
-          <motion.span 
-            key={index}
-            whileHover={{ scale: 1.2, color: "#9fe43f" }}
-            className="text-2xl md:text-3xl font-black text-white/10 transition-all cursor-default select-none relative group"
-          >
-            {brand}
-            <span className="absolute -inset-2 bg-[#9fe43f]/0 group-hover:bg-[#9fe43f]/5 rounded-lg blur-xl transition-all duration-300" />
-          </motion.span>
-        ))}
+    <section className="w-full bg-[#011a42] border-y border-white/5 py-10 overflow-hidden">
+      {/* Marquee */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#011a42] via-transparent to-[#011a42] z-10 pointer-events-none"></div>
+        <div className="flex w-max animate-marquee">
+          {[...brands, ...brands].map((brand, index) => (
+            <div key={index} className="flex items-center gap-3 mx-7 md:mx-10 flex-shrink-0">
+              {brand.logo && (
+                <img
+                  src={brand.logo}
+                  alt=""
+                  className="h-7 w-7 md:h-8 md:w-8 opacity-50"
+                  loading="lazy"
+                  decoding="async"
+                  aria-hidden="true"
+                />
+              )}
+              <span className="text-xl md:text-2xl font-black tracking-tight text-white/40 whitespace-nowrap select-none">
+                {brand.name}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
-      
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center mt-6"
-      >
-        <p className="text-[#9fe43f] text-xs font-bold tracking-widest uppercase opacity-70 flex items-center justify-center gap-2">
-          <motion.span
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            ⚡
-          </motion.span>
-          Soporte técnico especializado para todas las marcas (70cc a +1000cc)
+
+      {/* Caption centrado */}
+      <div className="mt-8 flex justify-center px-6">
+        <p className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-5 py-2.5 text-[#9fe43f] text-[11px] md:text-xs font-bold tracking-widest uppercase text-center">
+          <Wrench className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+          Soporte para todas las marcas · 70cc a +1000cc
         </p>
-      </motion.div>
-    </div>
+      </div>
+    </section>
   );
 };
 
@@ -477,7 +497,7 @@ const ProblemSolution = () => {
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Ubicación y Playback</h3>
                         <p className="text-gray-300 text-lg leading-relaxed max-w-md">
-                            Rastreo en tiempo real 24hs. Además, accedé al <strong>historial de recorridos y kilómetros de hasta 6 meses atrás</strong>. Sabé dónde estuvo tu moto en todo momento.
+                            Rastreo en tiempo real 24hs. Además, accedé al <strong>historial de recorridos y kilómetros de hasta 6 meses atrás</strong>.
                         </p>
                     </div>
                     
@@ -589,6 +609,50 @@ const ProblemSolution = () => {
                     Diseñado para motos. Consumo ultra-bajo que permite hasta <strong>50 días de Stand-by</strong> sin drenar tu batería.
                 </p>
             </motion.div>
+
+            {/* Card 4: Corte de Corriente Remoto (ANIMADO) */}
+            <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.1 }}
+                 className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+            >
+                 <div className="relative w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-[#9fe43f]">
+                    <motion.div
+                        className="absolute inset-0 bg-[#9fe43f]/20 rounded-2xl"
+                        animate={{ opacity: [0, 0.6, 0] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <PowerOff className="w-6 h-6 relative z-10" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Corte de Corriente Remoto</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                    Inmovilizá tu moto desde el celular con un solo toque. Enviás la orden desde la App y <strong>el motor no puede volver a arrancar</strong>.
+                </p>
+            </motion.div>
+
+            {/* Card 5: Protocolo de Recupero (ANIMADO) */}
+            <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ delay: 0.2 }}
+                 className="md:col-span-2 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+            >
+                 <div className="absolute top-0 right-0 w-60 h-60 bg-[#9fe43f]/10 rounded-full blur-[80px] -mr-16 -mt-16 pointer-events-none"></div>
+                 <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
+                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#9fe43f] flex-shrink-0">
+                        <Navigation className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold text-white mb-2">Protocolo de Recupero</h3>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                            Si sucede lo peor, activamos nuestro protocolo para que tu moto sea <strong>retirada de donde esté, sin importar la zona</strong>. Te acompañamos en todo el proceso hasta que vuelva a tus manos.
+                        </p>
+                    </div>
+                 </div>
+            </motion.div>
         </div>
       </div>
     </section>
@@ -658,14 +722,21 @@ const HardwareSpecs = () => {
     <section id="hardware" className="py-20 px-6 bg-[#00102b] relative overflow-hidden border-t border-white/5">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
         
-        {/* Visual de Hardware (Abstracto) */}
+        {/* Visual de Hardware: Certificaciones internacionales */}
         <div className="w-full md:w-1/2 flex justify-center">
-            <div className="relative w-72 h-72 md:w-96 md:h-96 bg-gradient-to-br from-[#02255b] to-[#011a42] rounded-3xl border border-white/10 flex items-center justify-center shadow-[0_0_50px_rgba(2,37,91,0.5)] group">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
-                <Cpu className="w-32 h-32 text-white/20 group-hover:text-[#9fe43f]/20 transition-colors duration-500" />
-                
-                {/* Labels Flotantes */}
-                <motion.div 
+            <div className="relative w-72 h-72 md:w-96 md:h-96 bg-white rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(2,37,91,0.5)]">
+                <img
+                    src="/certificaciones.jpg"
+                    alt="Certificaciones internacionales del equipo: CE, UKCA, EAC, RCM, FCC, ICASA, ANATEL, PTCRB, GCF, NOM, NYCE, RoHS, REACH, WEEE, NF, R-NZ, IMDA y TDRA"
+                    className="w-full h-full object-contain p-3 rounded-3xl"
+                    width="800"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                />
+
+                {/* Label Flotante */}
+                <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
@@ -673,11 +744,6 @@ const HardwareSpecs = () => {
                 >
                     4G LTE CERTIFICADO
                 </motion.div>
-                
-                <div className="absolute bottom-8 left-8 text-white text-xs font-mono">
-                    MODELO: HERCULES LITE<br/>
-                    ESTADO: ONLINE
-                </div>
             </div>
         </div>
 
@@ -701,28 +767,28 @@ const HardwareSpecs = () => {
                     <Signal className="w-8 h-8 text-[#9fe43f] flex-shrink-0" />
                     <div>
                         <h4 className="text-white font-bold">Conectividad 4G LTE</h4>
-                        <p className="text-gray-500 text-sm">Alta velocidad y estabilidad de conexión superior a equipos 2G antiguos.</p>
+                        <p className="text-gray-400 text-sm">Alta velocidad y estabilidad de conexión superior a equipos 2G antiguos.</p>
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <Battery className="w-8 h-8 text-[#9fe43f] flex-shrink-0" />
                     <div>
                         <h4 className="text-white font-bold">Modo Ahorro</h4>
-                        <p className="text-gray-500 text-sm">No descarga tu batería. Soporta largos períodos con la moto parada.</p>
+                        <p className="text-gray-400 text-sm">No descarga tu batería. Soporta largos períodos con la moto parada.</p>
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <Wrench className="w-8 h-8 text-[#9fe43f] flex-shrink-0" />
                     <div>
                         <h4 className="text-white font-bold">Instalación Oculta</h4>
-                        <p className="text-gray-500 text-sm">Compacto y cableado. Compatible con motos de 110cc a +1000cc.</p>
+                        <p className="text-gray-400 text-sm">Compacto y cableado. Compatible con motos de 110cc a +1000cc.</p>
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <ShieldCheck className="w-8 h-8 text-[#9fe43f] flex-shrink-0" />
                     <div>
-                        <h4 className="text-white font-bold">Soporte Real</h4>
-                        <p className="text-gray-500 text-sm">Hardware con continuidad de repuestos y actualizaciones de firmware.</p>
+                        <h4 className="text-white font-bold">Soporte Humano Real</h4>
+                        <p className="text-gray-400 text-sm">Un equipo de más de 12 personas a tu disposición. Siempre te atiende un humano, nunca una IA.</p>
                     </div>
                 </div>
             </div>
@@ -732,68 +798,142 @@ const HardwareSpecs = () => {
   );
 };
 
+// --- PRUEBA SOCIAL: CLIENTES REALES ---
+// Para cargar fotos/videos reales: poné los archivos en public/clientes/
+// y reemplazá los items de este array. Ejemplos:
+//   { type: "image", src: "/clientes/foto1.jpg", caption: "Honda Wave · Bº Centro" }
+//   { type: "video", src: "/clientes/video1.mp4", caption: "Instalación en taller" }
+const CLIENT_MEDIA = [
+  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
+  { type: "placeholder", kind: "video", caption: "Video de instalación" },
+  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
+  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
+  { type: "placeholder", kind: "video", caption: "Video de recupero" },
+];
+
+const SocialProof = () => {
+  return (
+    <section id="clientes" className="py-24 px-6 bg-[#011a42] border-t border-white/5 scroll-mt-20 overflow-hidden">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-1.5 text-[#9fe43f] mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-5 h-5 fill-[#9fe43f]" aria-hidden="true" />
+            ))}
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
+            +300 motos protegidas <br />
+            <span className="text-[#9fe43f]">en Córdoba.</span>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Clientes reales, motos reales. Mirá quiénes ya confían en Centinel.
+          </p>
+        </motion.div>
+
+        {/* Carrusel deslizable (mobile-first) */}
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-thin">
+          {CLIENT_MEDIA.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="snap-center flex-shrink-0 w-64 md:w-72"
+            >
+              <div className="relative h-80 md:h-96 rounded-3xl overflow-hidden border border-white/10 bg-[#02255b]">
+                {item.type === "image" && (
+                  <img
+                    src={item.src}
+                    alt={item.caption}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                {item.type === "video" && (
+                  <video
+                    src={item.src}
+                    className="w-full h-full object-cover"
+                    controls
+                    playsInline
+                    preload="metadata"
+                  />
+                )}
+                {item.type === "placeholder" && (
+                  <div className="w-full h-full flex flex-col items-center justify-center gap-4 border-2 border-dashed border-white/15 rounded-3xl text-gray-500">
+                    {item.kind === "video" ? (
+                      <PlayCircle className="w-12 h-12" aria-hidden="true" />
+                    ) : (
+                      <Camera className="w-12 h-12" aria-hidden="true" />
+                    )}
+                    <span className="text-xs font-bold uppercase tracking-wider">{item.caption}</span>
+                  </div>
+                )}
+                {item.type !== "placeholder" && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#011a42]/95 to-transparent p-4 pt-10">
+                    <p className="text-white text-sm font-bold">{item.caption}</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <p className="text-center text-gray-500 text-xs mt-6 md:hidden">
+          ← Deslizá para ver más →
+        </p>
+      </div>
+    </section>
+  );
+};
+
 // 4. PRICING SECTION
 const PricingSection = () => {
-  const [billingCycle, setBillingCycle] = useState('savings'); 
-  const phoneNumber = "5493516567060"; 
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const phoneNumber = "5493516567060";
 
   const plans = [
     {
       id: "mensual",
       type: "monthly",
-      name: "MENSUAL",
+      name: "PAGO MENSUAL",
       price: "$24.700",
       period: "/ mes incluye IVA",
       highlight: false,
       features: [
-        "Sin permanencia",
-        "Precio regular",
-        "Cancelás cuando querés",
+        "Sin permanencia, cancelás cuando querés",
+        "Equipo en comodato, 100% bonificado",
+        "App y monitoreo 24/7 incluidos",
         "Activación inmediata",
-        "Equipo en comodato, 100% bonificado"
+        "+ $40.000 instalación oculta profesional (pago único)"
       ],
-      cta: "ELEGIR MENSUAL",
+      cta: "ELEGIR PAGO MENSUAL",
       message: "Hola Centinel, quiero contratar el Plan mensual y comenzar a proteger mi vehículo. ¿Cómo reservo mi turno?"
     },
     {
-      id: "semestral",
-      type: "savings",
-      name: "SEMESTRAL",
-      price: "$19.300",
-      period: "/ mes incluye IVA",
-      // badge eliminado para este plan
-      note: "Pago único de $115.800 incluye IVA",
-      discount: "AHORRÁS 20%",
-      highlight: false,
-      features: [
-        "Ahorro de un 20% total",
-        "Precio congelado 6 meses",
-        "Prioridad en turnos",
-        "Activación inmediata",
-        "Equipo en comodato, 100% bonificado"
-      ],
-      cta: "ELEGIR SEMESTRAL",
-      message: "Hola Centinel, quiero aprovechar el descuento y contratar el Plan semestral. ¿Cómo reservo mi turno?"
-    },
-    {
-      id: "anual",
-      type: "savings",
-      name: "ANUAL",
-      price: "$18.700",
-      badge: "MÁS ELEGIDO",
-      period: "/ mes incluye IVA",
-      note: "Pago único de $224.400 incluye IVA",
-      discount: "AHORRÁS 25%",
+      id: "unico",
+      type: "unico",
+      name: "PAGO ÚNICO",
+      price: "$330.000",
+      badge: "EQUIPO PROPIO",
+      period: "una sola vez, incluye IVA",
+      note: "3 cuotas sin interés o 6 cuotas con 10% de recargo",
       highlight: true,
       features: [
-        "Máximo ahorro, descuento del 25% total",
-        "Precio congelado 12 meses",
-        "Prioridad en turnos",
+        "El equipo GPS es tuyo para siempre",
+        "3 cuotas sin interés o 6 con 10% de recargo",
+        "Luego solo $4.500/mes por servidores y chip de datos satelitales",
         "Activación inmediata",
-        "Equipo en comodato, 100% bonificado"
+        "+ $40.000 instalación oculta profesional (pago único)"
       ],
-      cta: "ELEGIR ANUAL",
-      message: "Hola Centinel, quiero aprovechar el máximo ahorro y contratar el Plan ANUAL. ¿Cómo reservo mi turno?"
+      cta: "ELEGIR PAGO ÚNICO",
+      message: "Hola Centinel, quiero contratar el Pago Único y comenzar a proteger mi vehículo. ¿Cómo reservo mi turno?"
     }
   ];
 
@@ -806,7 +946,7 @@ const PricingSection = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-10">
           <span className="text-[#9fe43f] font-bold tracking-widest text-sm uppercase mb-2 block">
-            GARANTÍA ANTI-INFLACIÓN
+            PRECIOS CLAROS, SIN SORPRESAS
           </span>
           <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
             Elegí tu Plan de Protección
@@ -814,7 +954,7 @@ const PricingSection = () => {
           
           <div className="flex justify-center mb-8">
             <div className="bg-[#011a42] p-1.5 rounded-full border border-white/10 inline-flex relative gap-2">
-                {['monthly', 'savings'].map((cycle) => (
+                {['monthly', 'unico'].map((cycle) => (
                     <button
                         key={cycle}
                         onClick={() => setBillingCycle(cycle)}
@@ -822,7 +962,7 @@ const PricingSection = () => {
                             billingCycle === cycle ? 'text-[#02255b]' : 'text-gray-400 hover:text-white'
                         }`}
                     >
-                        {cycle === 'monthly' ? 'Pago Mensual' : 'Packs Ahorro'}
+                        {cycle === 'monthly' ? 'Pago Mensual' : 'Pago Único'}
                         {billingCycle === cycle && (
                             <motion.div
                                 layoutId="activeCycle"
@@ -909,12 +1049,6 @@ const PricingSection = () => {
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
-        
-        <div className="mt-12 flex justify-center">
-             <p className="text-center text-sm text-gray-300 bg-white/5 px-6 py-3 rounded-xl border border-white/10 backdrop-blur-sm max-w-2xl">
-                * Los precios pueden variar. <span className="text-[#9fe43f] font-bold">Costo de instalación no incluido</span> (Consultar al reservar turno).
-            </p>
         </div>
       </div>
     </section>
@@ -1056,10 +1190,14 @@ const TrustSection = () => {
     <section id="taller" className="py-24 px-6 bg-[#02255b] scroll-mt-20 relative overflow-hidden">
         {/* Background Workshop */}
         <div className="absolute inset-0 z-0">
-             <img 
-              src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=80&w=2070&auto=format&fit=crop" 
+             <img
+              src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=70&w=1280&auto=format&fit=crop"
               alt="Taller de motos profesional"
               className="w-full h-full object-cover opacity-10 mix-blend-overlay"
+              width="1280"
+              height="853"
+              loading="lazy"
+              decoding="async"
               onError={(e) => e.target.style.display = 'none'}
             />
              <div className="absolute inset-0 bg-gradient-to-r from-[#02255b] via-[#02255b]/95 to-[#02255b]/90" />
@@ -1146,19 +1284,22 @@ const FAQ = () => {
             <div key={index} className="border border-white/10 rounded-2xl overflow-hidden bg-[#02255b]">
               <button
                 onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-                className="w-full p-6 flex items-center justify-between text-left focus:outline-none hover:bg-white/5 transition-colors"
+                className="w-full p-6 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe43f] hover:bg-white/5 transition-colors"
+                aria-expanded={activeIndex === index}
+                aria-controls={`faq-panel-${index}`}
               >
                 <span className="font-bold text-white text-lg pr-4">{faq.question}</span>
                 {activeIndex === index ? (
-                  <Minus className="w-6 h-6 text-[#9fe43f] flex-shrink-0" />
+                  <Minus className="w-6 h-6 text-[#9fe43f] flex-shrink-0" aria-hidden="true" />
                 ) : (
-                  <Plus className="w-6 h-6 text-[#9fe43f] flex-shrink-0" />
+                  <Plus className="w-6 h-6 text-[#9fe43f] flex-shrink-0" aria-hidden="true" />
                 )}
               </button>
-              
+
               <AnimatePresence>
                 {activeIndex === index && (
                   <motion.div
+                    id={`faq-panel-${index}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -1256,11 +1397,11 @@ const Footer = () => {
                         </li>
                         <li className="flex gap-3 items-center">
                             <Phone className="w-5 h-5 text-[#9fe43f] flex-shrink-0" />
-                            <span>+54 9 3516567060</span>
+                            <a href="tel:+5493516567060" className="hover:text-[#9fe43f] transition-colors">+54 9 3516567060</a>
                         </li>
                         <li className="flex gap-3 items-center">
                             <Mail className="w-5 h-5 text-[#9fe43f] flex-shrink-0" />
-                            <span>Soportecentinelgps@gmail.com</span>
+                            <a href="mailto:Soportecentinelgps@gmail.com" className="hover:text-[#9fe43f] transition-colors break-all">Soportecentinelgps@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -1305,35 +1446,13 @@ const FloatingWhatsApp = () => (
 export default function App() {
   return (
     <div className="min-h-screen bg-[#02255b] font-sans text-white selection:bg-[#9fe43f] selection:text-[#02255b]">
-      {/* Estilos globales para fuentes simuladas y animación marquee */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        html { scroll-behavior: smooth; }
-        
-        @keyframes scan {
-          0%, 100% { top: 0%; opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { top: 100%; opacity: 0; }
-        }
-
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
-        
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
-        }
-      `}</style>
-      
       <Navbar />
       <Hero />
       <BrandMarquee />
       <ProblemSolution />
       <CutOffDetail />
       <HardwareSpecs />
+      <SocialProof />
       <PricingSection />
       <HowItWorks />
       <StealthMode />
