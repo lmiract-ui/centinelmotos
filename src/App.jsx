@@ -620,8 +620,8 @@ const CutOffDetail = () => {
                 ¿Cómo funciona?
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-                El GPS controla un relay instalado en un circuito clave (bomba de combustible o encendido). 
-                Al enviar la orden desde la App, el circuito se abre y el motor se apaga o no puede volver a arrancar.
+                Enviás la orden desde la App y el sistema inmoviliza el vehículo de forma remota: el motor se apaga o no puede volver a arrancar.
+                El método de instalación se mantiene en reserva por tu seguridad.
             </p>
         </div>
 
