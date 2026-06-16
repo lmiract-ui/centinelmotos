@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   MapPin, 
   PowerOff, 
@@ -26,8 +26,6 @@ import {
   Phone,
   Signal,
   History,
-  Camera,
-  PlayCircle,
   Star,
   Cpu,
   Package,
@@ -39,7 +37,11 @@ import {
   Navigation,
   Linkedin
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { LazyMotion, m, AnimatePresence } from 'framer-motion';
+import { SOCIAL_PROOF } from './data/socialProof';
+
+// Carga diferida de las features de animación (chunk async, fuera del bundle inicial)
+const loadMotionFeatures = () => import('./lib/motionFeatures').then((res) => res.default);
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
 const COLORS = {
@@ -49,8 +51,10 @@ const COLORS = {
   white: "#ffffff",
 };
 
-// Mensaje General Actualizado
-const WHATSAPP_LINK = "https://wa.me/5493516567060?text=Hola%20Centinel,%20quiero%20comunicarme%20con%20un%20asesor%20para%20conocer%20como%20proteger%20mi%20vehículo%20¿Me%20podrías%20comentar%20mas%20sobre%20el%20servicio?";
+// WhatsApp: número y mensaje únicos para TODOS los botones de la web
+const WHATSAPP_PHONE = "5493518626405";
+const WHATSAPP_MESSAGE = "Hola, me interesa el servicio de rastreo para mi moto";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 // --- CONVERSION TRACKING (Meta Pixel) ---
 // Dispara el evento estándar "Lead" cuando alguien inicia contacto por WhatsApp.
@@ -164,7 +168,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -191,7 +195,7 @@ const Navbar = () => {
                 HABLAR POR WHATSAPP <ArrowRight className="w-5 h-5" />
               </a>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </nav>
@@ -220,12 +224,12 @@ const Hero = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=70&w=1600&auto=format&fit=crop"
+          src="/img/hero-moto.webp"
           alt="Motocicleta de noche"
           className="w-full h-full object-cover opacity-40"
           width="1600"
           height="1067"
-          fetchpriority="high"
+          fetchPriority="high"
           decoding="async"
           onError={(e) => e.target.style.display = 'none'}
         />
@@ -240,7 +244,7 @@ const Hero = () => {
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
-          <motion.div
+          <m.div
             key={i}
             className="absolute w-2 h-2 bg-[#9fe43f]/30 rounded-full"
             style={{
@@ -261,12 +265,12 @@ const Hero = () => {
       </div>
 
       <div className="max-w-6xl mx-auto text-center z-10 relative">
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
@@ -276,18 +280,18 @@ const Hero = () => {
               ★ +300 motos protegidas en Córdoba
             </span>
             <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs md:text-sm font-bold tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(159,228,63,0.1)]">
-              <motion.span
+              <m.span
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 className="inline-block w-2 h-2 bg-[#9fe43f] rounded-full mr-2"
               />
               Taller de instalación propio
             </span>
-          </motion.div>
+          </m.div>
           
           <h1 className="mb-10 font-black text-white tracking-tight">
             {/* LÍNEA 1: TÍTULO PRINCIPAL (Rastreo) */}
-            <motion.span 
+            <m.span 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -298,26 +302,26 @@ const Hero = () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9fe43f] via-[#b0ff4f] to-white animate-gradient-x">
                   Satelital para tu Moto.
                 </span>
-                <motion.span
+                <m.span
                   className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#9fe43f] to-transparent"
                   animate={{ scaleX: [0, 1, 0], opacity: [0, 1, 0] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 />
               </span>
-            </motion.span>
+            </m.span>
 
             {/* LÍNEA 2: SUBTÍTULO (Corte de corriente) */}
-            <motion.span 
+            <m.span 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
               className="block text-2xl md:text-3xl lg:text-4xl font-bold text-gray-300 mt-4 tracking-normal"
             >
               Cortale la corriente desde tu celular.
-            </motion.span>
+            </m.span>
           </h1>
 
-          <motion.p 
+          <m.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
@@ -326,7 +330,7 @@ const Hero = () => {
             Tu moto te avisa si alguien la toca. Vos la ves en el mapa y la apagás desde el celular.{" "}
             <span className="text-[#9fe43f] font-bold relative whitespace-nowrap">
               El control lo tenés vos
-              <motion.span
+              <m.span
                 className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#9fe43f]"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -334,15 +338,15 @@ const Hero = () => {
               />
             </span>
             , no el que se la quiere llevar.
-          </motion.p>
+          </m.p>
 
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
             className="flex flex-col md:flex-row gap-4 justify-center items-center"
           >
-            <motion.a
+            <m.a
               href="#beneficios"
               onClick={handleScrollToFeatures}
               whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.5)" }}
@@ -350,15 +354,15 @@ const Hero = () => {
               className="inline-flex items-center gap-3 bg-white text-[#02255b] font-black py-5 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all cursor-pointer group"
             >
               Desliza para conocer más
-              <motion.div
+              <m.div
                 animate={{ y: [0, 5, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
                 <ChevronDown className="w-6 h-6 group-hover:text-[#9fe43f] transition-colors" />
-              </motion.div>
-            </motion.a>
+              </m.div>
+            </m.a>
             
-            <motion.a
+            <m.a
               href={WHATSAPP_LINK}
               target="_blank"
               rel="noopener noreferrer"
@@ -368,9 +372,9 @@ const Hero = () => {
             >
               Hablar con un asesor
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </motion.a>
-          </motion.div>
-        </motion.div>
+            </m.a>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );
@@ -436,7 +440,7 @@ const ProblemSolution = () => {
     <section id="beneficios" className="py-24 px-6 bg-[#011a42] relative scroll-mt-20 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
-        <motion.div
+        <m.div
           className="absolute top-0 left-1/4 w-96 h-96 bg-[#9fe43f]/5 rounded-full blur-[120px]"
           animate={{
             y: [0, 50, 0],
@@ -444,7 +448,7 @@ const ProblemSolution = () => {
           }}
           transition={{ duration: 8, repeat: Infinity }}
         />
-        <motion.div
+        <m.div
           className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px]"
           animate={{
             y: [0, -50, 0],
@@ -455,13 +459,13 @@ const ProblemSolution = () => {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -470,29 +474,29 @@ const ProblemSolution = () => {
             <span className="text-[#9fe43f] font-bold tracking-widest text-sm uppercase bg-[#9fe43f]/10 px-4 py-2 rounded-full border border-[#9fe43f]/30">
               ⚡ App de Monitoreo 24/7
             </span>
-          </motion.div>
+          </m.div>
           
           <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">
             Control Total de tu Moto. <br />
-            <motion.span 
+            <m.span 
               className="text-transparent bg-clip-text bg-gradient-to-r from-[#9fe43f] to-emerald-400"
               animate={{ backgroundPosition: ["0%", "100%", "0%"] }}
               transition={{ duration: 5, repeat: Infinity }}
               style={{ backgroundSize: "200% auto" }}
             >
               Toda la info en tu mano.
-            </motion.span>
+            </m.span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Funciones avanzadas diseñadas para el usuario urbano y de viaje.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Bento Grid Container */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(200px,auto)]">
             
             {/* Card 1: Ubicación & Historial (Large - ANIMADO) */}
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -532,7 +536,7 @@ const ProblemSolution = () => {
                          <div className="absolute w-64 h-64 border border-[#9fe43f]/10 rounded-full"></div>
                          
                          {/* Scanning Radar Animation */}
-                         <motion.div 
+                         <m.div 
                             className="absolute top-1/2 left-1/2 w-[150%] h-[150%] origin-top-left bg-gradient-to-r from-transparent via-[#9fe43f]/5 to-transparent"
                             style={{ top: '50%', left: '50%', x: '-50%', y: '-50%' }}
                             animate={{ rotate: 360 }}
@@ -542,14 +546,14 @@ const ProblemSolution = () => {
                          {/* Static Dot (Moto) in Center with ELEGANT WAVES */}
                          <div className="relative z-20 flex items-center justify-center w-20 h-20">
                              {/* Onda Expansiva Suave 1 */}
-                             <motion.div
+                             <m.div
                                 className="absolute inset-0 bg-[#9fe43f] rounded-full"
                                 initial={{ scale: 0.2, opacity: 0 }}
                                 animate={{ scale: 1.5, opacity: [0, 0.3, 0] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                              />
                              {/* Onda Expansiva Suave 2 (Desfasada) */}
-                             <motion.div
+                             <m.div
                                 className="absolute inset-0 bg-[#9fe43f] rounded-full"
                                 initial={{ scale: 0.2, opacity: 0 }}
                                 animate={{ scale: 1.5, opacity: [0, 0.3, 0] }}
@@ -557,7 +561,7 @@ const ProblemSolution = () => {
                              />
                              
                              {/* Core Dot (Latido elegante) */}
-                             <motion.div 
+                             <m.div 
                                 className="w-3.5 h-3.5 bg-[#9fe43f] rounded-full border border-white/80 shadow-[0_0_15px_rgba(159,228,63,0.4)] z-10 relative"
                                 animate={{ scale: [1, 1.1, 1], opacity: [0.9, 1, 0.9] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -572,22 +576,22 @@ const ProblemSolution = () => {
                          </div>
                     </div>
                 </div>
-            </motion.div>
+            </m.div>
              {/* Card 2: Alertas Inteligentes (ANIMADO) */}
-            <motion.div
+            <m.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
                  transition={{ delay: 0.1 }}
                  className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg flex flex-col"
             >
-                 <motion.div 
+                 <m.div 
                     className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-[#9fe43f]"
                     animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
                     transition={{ repeat: Infinity, repeatDelay: 3, duration: 0.5 }}
                  >
                     <AlertTriangle className="w-6 h-6" />
-                </motion.div>
+                </m.div>
                 <h3 className="text-xl font-bold text-white mb-2">Alertas Instantáneas</h3>
                 <ul className="text-gray-400 text-sm space-y-2 mt-2">
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-[#9fe43f] rounded-full"></div> Movimiento no autorizado</li>
@@ -595,10 +599,10 @@ const ProblemSolution = () => {
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-[#9fe43f] rounded-full"></div> Exceso de velocidad</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-[#9fe43f] rounded-full"></div> Salida de zonas seguras personalizables</li>
                 </ul>
-            </motion.div>
+            </m.div>
 
              {/* Card 3: Batería & Consumo (ANIMADO) */}
-            <motion.div
+            <m.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
@@ -611,7 +615,7 @@ const ProblemSolution = () => {
                     </div>
                     {/* Live Battery Graphic */}
                     <div className="w-16 h-8 border-2 border-white/20 rounded-md p-1 relative flex items-center">
-                        <motion.div 
+                        <m.div 
                             className="h-full bg-[#9fe43f] rounded-sm"
                             animate={{ width: ["40%", "100%", "40%"] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -623,10 +627,10 @@ const ProblemSolution = () => {
                 <p className="text-gray-400 text-sm leading-relaxed">
                     Diseñado para motos. Consumo ultra-bajo que permite hasta <strong>50 días de Stand-by</strong> sin drenar tu batería.
                 </p>
-            </motion.div>
+            </m.div>
 
             {/* Card 4: Corte de Corriente Remoto (ANIMADO) */}
-            <motion.div
+            <m.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
@@ -634,7 +638,7 @@ const ProblemSolution = () => {
                  className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
             >
                  <div className="relative w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-[#9fe43f]">
-                    <motion.div
+                    <m.div
                         className="absolute inset-0 bg-[#9fe43f]/20 rounded-2xl"
                         animate={{ opacity: [0, 0.6, 0] }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -645,10 +649,10 @@ const ProblemSolution = () => {
                 <p className="text-gray-400 text-sm leading-relaxed">
                     Inmovilizá tu moto desde el celular con un solo toque. Enviás la orden desde la App y <strong>el motor no puede volver a arrancar</strong>.
                 </p>
-            </motion.div>
+            </m.div>
 
             {/* Card 5: Protocolo de Recupero (ANIMADO) */}
-            <motion.div
+            <m.div
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
@@ -667,7 +671,7 @@ const ProblemSolution = () => {
                         </p>
                     </div>
                  </div>
-            </motion.div>
+            </m.div>
         </div>
       </div>
     </section>
@@ -751,14 +755,14 @@ const HardwareSpecs = () => {
                 />
 
                 {/* Label Flotante */}
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
                     className="absolute -top-4 -right-4 bg-[#9fe43f] text-[#02255b] text-xs font-black px-4 py-2 rounded-lg shadow-lg uppercase"
                 >
                     4G LTE CERTIFICADO
-                </motion.div>
+                </m.div>
             </div>
         </div>
 
@@ -814,23 +818,71 @@ const HardwareSpecs = () => {
 };
 
 // --- PRUEBA SOCIAL: CLIENTES REALES ---
-// Para cargar fotos/videos reales: poné los archivos en public/clientes/
-// y reemplazá los items de este array. Ejemplos:
-//   { type: "image", src: "/clientes/foto1.jpg", caption: "Honda Wave · Bº Centro" }
-//   { type: "video", src: "/clientes/video1.mp4", caption: "Instalación en taller" }
-const CLIENT_MEDIA = [
-  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
-  { type: "placeholder", kind: "video", caption: "Video de instalación" },
-  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
-  { type: "placeholder", kind: "photo", caption: "Foto de cliente" },
-  { type: "placeholder", kind: "video", caption: "Video de recupero" },
-];
+// El material vive en src/data/socialProof.js (generado por scripts/process-social-proof.mjs).
+// Para agregar leyendas: en ese archivo, sumá "caption" a cualquier ítem.
 
-const SocialProof = () => {
+// Video que SOLO se reproduce cuando está visible (ahorra datos/batería en mobile).
+const AutoplayVideo = ({ src, poster }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster || undefined}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover"
+    />
+  );
+};
+
+// Mezcla round-robin: 1ro de cada perfil, 2do de cada perfil, etc.
+// Intercala los perfiles SIN alterar el orden interno de cada uno.
+// El orden de esta lista define cómo se intercalan en la vista "ver todo".
+const INTERLEAVE_ORDER = ["laburante", "rider", "transporte", "fierrero"];
+const interleaveSocialProof = () => {
+  const lists = INTERLEAVE_ORDER.map((k) => SOCIAL_PROOF[k]).filter(Boolean);
+  const max = Math.max(...lists.map((l) => l.length));
+  const out = [];
+  for (let i = 0; i < max; i++) {
+    for (const list of lists) {
+      if (list[i]) out.push(list[i]);
+    }
+  }
+  return out;
+};
+
+const SocialProof = ({ profileId }) => {
+  // Material del perfil; si no hay perfil (landing "ver todo"), mezcla intercalada de los 4.
+  const media =
+    profileId && SOCIAL_PROOF[profileId]
+      ? SOCIAL_PROOF[profileId]
+      : interleaveSocialProof();
+
+  if (!media || media.length === 0) return null;
+
   return (
     <section id="clientes" className="py-24 px-6 bg-[#011a42] border-t border-white/5 scroll-mt-20 overflow-hidden">
       <div className="max-w-6xl mx-auto">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -846,57 +898,40 @@ const SocialProof = () => {
             <span className="text-[#9fe43f]">en Córdoba.</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Clientes reales, motos reales. Mirá quiénes ya confían en Centinel.
+            Clientes que cuidan lo que es suyo. Centinel está para quedarse.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Carrusel deslizable (mobile-first) */}
         <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 md:mx-0 md:px-0 scrollbar-thin">
-          {CLIENT_MEDIA.map((item, i) => (
-            <motion.div
+          {media.map((item, i) => (
+            <m.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
+              transition={{ delay: Math.min(i, 5) * 0.05 }}
               className="snap-center flex-shrink-0 w-64 md:w-72"
             >
               <div className="relative h-80 md:h-96 rounded-3xl overflow-hidden border border-white/10 bg-[#02255b]">
-                {item.type === "image" && (
+                {item.type === "image" ? (
                   <img
                     src={item.src}
-                    alt={item.caption}
+                    alt={item.caption || "Cliente de Centinel GPS en Córdoba"}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
                   />
+                ) : (
+                  <AutoplayVideo src={item.src} poster={item.poster} />
                 )}
-                {item.type === "video" && (
-                  <video
-                    src={item.src}
-                    className="w-full h-full object-cover"
-                    controls
-                    playsInline
-                    preload="metadata"
-                  />
-                )}
-                {item.type === "placeholder" && (
-                  <div className="w-full h-full flex flex-col items-center justify-center gap-4 border-2 border-dashed border-white/15 rounded-3xl text-gray-500">
-                    {item.kind === "video" ? (
-                      <PlayCircle className="w-12 h-12" aria-hidden="true" />
-                    ) : (
-                      <Camera className="w-12 h-12" aria-hidden="true" />
-                    )}
-                    <span className="text-xs font-bold uppercase tracking-wider">{item.caption}</span>
-                  </div>
-                )}
-                {item.type !== "placeholder" && (
+                {item.caption && (
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#011a42]/95 to-transparent p-4 pt-10">
                     <p className="text-white text-sm font-bold">{item.caption}</p>
                   </div>
                 )}
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
@@ -911,7 +946,6 @@ const SocialProof = () => {
 // 4. PRICING SECTION
 const PricingSection = () => {
   const [billingCycle, setBillingCycle] = useState('monthly');
-  const phoneNumber = "5493516567060";
 
   const plans = [
     {
@@ -979,7 +1013,7 @@ const PricingSection = () => {
                     >
                         {cycle === 'monthly' ? 'Pago Mensual' : 'Pago Único'}
                         {billingCycle === cycle && (
-                            <motion.div
+                            <m.div
                                 layoutId="activeCycle"
                                 className="absolute inset-0 bg-[#9fe43f] rounded-full -z-10"
                                 transition={{ type: "spring", stiffness: 500, damping: 30 }}
@@ -994,7 +1028,7 @@ const PricingSection = () => {
         <div className="flex flex-wrap justify-center gap-6 md:gap-8">
           <AnimatePresence mode='wait'>
             {filteredPlans.map((plan) => (
-              <motion.div 
+              <m.div 
                 key={plan.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1047,8 +1081,8 @@ const PricingSection = () => {
                   ))}
                 </ul>
 
-                <motion.a
-                  href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(plan.message)}`}
+                <m.a
+                  href={WHATSAPP_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-wa-source={`plan_${plan.id}`}
@@ -1061,8 +1095,8 @@ const PricingSection = () => {
                   }`}
                 >
                   {plan.cta}
-                </motion.a>
-              </motion.div>
+                </m.a>
+              </m.div>
             ))}
           </AnimatePresence>
         </div>
@@ -1207,7 +1241,7 @@ const TrustSection = () => {
         {/* Background Workshop */}
         <div className="absolute inset-0 z-0">
              <img
-              src="https://images.unsplash.com/photo-1530124566582-a618bc2615dc?q=70&w=1280&auto=format&fit=crop"
+              src="/img/taller.webp"
               alt="Taller de motos profesional"
               className="w-full h-full object-cover opacity-10 mix-blend-overlay"
               width="1280"
@@ -1314,7 +1348,7 @@ const FAQ = () => {
 
               <AnimatePresence>
                 {activeIndex === index && (
-                  <motion.div
+                  <m.div
                     id={`faq-panel-${index}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
@@ -1324,7 +1358,7 @@ const FAQ = () => {
                     <div className="p-6 pt-0 text-gray-400 leading-relaxed border-t border-white/5 text-base">
                       {faq.answer}
                     </div>
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             </div>
@@ -1413,7 +1447,7 @@ const Footer = () => {
                         </li>
                         <li className="flex gap-3 items-center">
                             <Phone className="w-5 h-5 text-[#9fe43f] flex-shrink-0" />
-                            <a href="tel:+5493516567060" className="hover:text-[#9fe43f] transition-colors">+54 9 3516567060</a>
+                            <a href="tel:+5493518626405" className="hover:text-[#9fe43f] transition-colors">+54 9 3518626405</a>
                         </li>
                         <li className="flex gap-3 items-center">
                             <Mail className="w-5 h-5 text-[#9fe43f] flex-shrink-0" />
@@ -1436,7 +1470,7 @@ const Footer = () => {
 
 // 10. WHATSAPP BUTTON & APP COMPONENT
 const FloatingWhatsApp = () => (
-  <motion.a
+  <m.a
     href={WHATSAPP_LINK}
     target="_blank"
     rel="noopener noreferrer"
@@ -1456,7 +1490,7 @@ const FloatingWhatsApp = () => (
     >
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
     </svg>
-  </motion.a>
+  </m.a>
 );
 
 // ============================================================
@@ -1618,7 +1652,7 @@ const ProfileSelector = ({ onSelect }) => {
 
       <div className="max-w-md mx-auto w-full flex flex-col flex-1 justify-center relative z-10">
         {/* Logo */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-4"
@@ -1629,30 +1663,30 @@ const ProfileSelector = ({ onSelect }) => {
           <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase mt-1">
             Seguridad satelital para tu moto · Córdoba
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Pregunta */}
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
           className="text-3xl md:text-4xl font-black text-white text-center mb-2 leading-tight"
         >
           ¿Cómo vivís <span className="text-[#9fe43f]">tu moto</span>?
-        </motion.h1>
-        <motion.p
+        </m.h1>
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="text-gray-300 text-center mb-5 text-sm"
         >
           Elegí la que más se parezca a vos y te mostramos cómo protegerla.
-        </motion.p>
+        </m.p>
 
         {/* Tarjetas de perfil */}
         <div className="flex flex-col gap-2.5">
           {options.map((opt, i) => (
-            <motion.button
+            <m.button
               key={opt.id}
               initial={{ opacity: 0, y: 30 }}
               animate={
@@ -1691,7 +1725,7 @@ const ProfileSelector = ({ onSelect }) => {
                 "{opt.phrase}"
               </span>
               {picked === opt.id ? (
-                <motion.span
+                <m.span
                   className="w-5 h-5 rounded-full border-2 border-[#9fe43f] border-t-transparent flex-shrink-0"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
@@ -1700,22 +1734,22 @@ const ProfileSelector = ({ onSelect }) => {
               ) : (
                 <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-[#9fe43f] group-hover:translate-x-1 transition-all flex-shrink-0" aria-hidden="true" />
               )}
-            </motion.button>
+            </m.button>
           ))}
         </div>
 
         {/* Salida discreta / estado de localización */}
         {picked ? (
-          <motion.p
+          <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="mt-2 mx-auto min-h-[44px] flex items-center gap-2 text-[#9fe43f] text-sm font-bold"
           >
             <span className="w-2 h-2 bg-[#9fe43f] rounded-full animate-ping" aria-hidden="true" />
             Localizando tu camino…
-          </motion.p>
+          </m.p>
         ) : (
-          <motion.button
+          <m.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.85 }}
@@ -1723,11 +1757,11 @@ const ProfileSelector = ({ onSelect }) => {
             className="mt-2 mx-auto text-gray-400 hover:text-white text-sm underline underline-offset-4 min-h-[44px] px-4 cursor-pointer transition-colors"
           >
             Prefiero ver toda la info →
-          </motion.button>
+          </m.button>
         )}
 
         {/* Prueba social mínima */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
@@ -1735,7 +1769,7 @@ const ProfileSelector = ({ onSelect }) => {
         >
           <span className="text-[#9fe43f]">★★★★★</span>
           <span className="font-bold text-gray-300">+300 motos protegidas en Córdoba</span>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
@@ -1768,7 +1802,7 @@ const TRUST_POINTS = [
 // --- FLUJO PAS POR PERFIL ---
 const ProfileFlow = ({ profileId, onReset }) => {
   const p = PROFILES[profileId];
-  const whatsappUrl = `https://wa.me/5493516567060?text=${encodeURIComponent(p.whatsappMessage)}`;
+  const whatsappUrl = WHATSAPP_LINK;
 
   return (
     <div className="bg-[#02255b]">
@@ -1791,52 +1825,52 @@ const ProfileFlow = ({ profileId, onReset }) => {
       <section className="pt-32 pb-16 px-6 text-center relative overflow-hidden">
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-10" />
         <div className="max-w-2xl mx-auto relative z-10">
-          <motion.span
+          <m.span
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="inline-block py-2 px-5 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs font-bold tracking-widest mb-8 uppercase"
           >
             {p.kicker}
-          </motion.span>
-          <motion.h1
+          </m.span>
+          <m.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
             className="text-4xl md:text-5xl font-black text-white leading-tight mb-6"
           >
             {p.problemTitle}
-          </motion.h1>
-          <motion.p
+          </m.h1>
+          <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.35 }}
             className="text-gray-300 text-lg md:text-xl leading-relaxed"
           >
             {p.problemText}
-          </motion.p>
+          </m.p>
         </div>
       </section>
 
       {/* 2. AGITAR */}
       <section className="py-16 px-6 bg-[#00102b] border-y border-white/5 text-center">
         <div className="max-w-2xl mx-auto">
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6"
           >
             <AlertTriangle className="w-4 h-4" aria-hidden="true" /> El riesgo es real
-          </motion.div>
-          <motion.h2
+          </m.div>
+          <m.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-3xl md:text-4xl font-black text-white mb-5"
           >
             {p.agitateTitle}
-          </motion.h2>
-          <motion.p
+          </m.h2>
+          <m.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -1844,7 +1878,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
             className="text-gray-400 text-lg leading-relaxed"
           >
             {p.agitateText}
-          </motion.p>
+          </m.p>
         </div>
       </section>
 
@@ -1853,37 +1887,37 @@ const ProfileFlow = ({ profileId, onReset }) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#9fe43f]/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="max-w-2xl mx-auto relative z-10">
           <div className="text-center mb-12">
-            <motion.span
+            <m.span
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               className="inline-block py-2 px-5 rounded-full bg-[#9fe43f] text-[#02255b] text-xs font-black tracking-widest mb-6 uppercase"
             >
               La solución
-            </motion.span>
-            <motion.h2
+            </m.span>
+            <m.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl md:text-5xl font-black text-white mb-4"
             >
               {p.solutionTitle}
-            </motion.h2>
-            <motion.p
+            </m.h2>
+            <m.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               className="text-gray-300 text-lg"
             >
               {p.solutionText}
-            </motion.p>
+            </m.p>
           </div>
 
           <div className="flex flex-col gap-4">
             {p.benefits.map((b, i) => {
               const Icon = b.icon;
               return (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1898,13 +1932,13 @@ const ProfileFlow = ({ profileId, onReset }) => {
                     <h3 className="text-white font-bold text-lg mb-1">{b.title}</h3>
                     <p className="text-gray-400 text-sm leading-relaxed">{b.desc}</p>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>
 
           {/* Confianza técnica (común a todos los perfiles) */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1930,10 +1964,10 @@ const ProfileFlow = ({ profileId, onReset }) => {
                 );
               })}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* CTA intermedio */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -1952,12 +1986,12 @@ const ProfileFlow = ({ profileId, onReset }) => {
             <p className="text-gray-500 text-xs mt-3">
               Te responde una persona del equipo, nunca un bot.
             </p>
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
       {/* 4. PRUEBA SOCIAL */}
-      <SocialProof />
+      <SocialProof profileId={profileId} />
 
       {/* 5. PLANES */}
       <PricingSection />
@@ -1965,23 +1999,23 @@ const ProfileFlow = ({ profileId, onReset }) => {
       {/* 6. CTA FINAL */}
       <section className="py-20 px-6 text-center bg-[#011a42] border-t border-white/5">
         <div className="max-w-xl mx-auto">
-          <motion.h2
+          <m.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-black text-white mb-4"
           >
             {p.ctaTitle}
-          </motion.h2>
-          <motion.p
+          </m.h2>
+          <m.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="text-gray-400 text-lg mb-8"
           >
             {p.ctaSub}
-          </motion.p>
-          <motion.a
+          </m.p>
+          <m.a
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1993,7 +2027,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
           >
             {p.ctaButton}
             <ArrowRight className="w-6 h-6" aria-hidden="true" />
-          </motion.a>
+          </m.a>
           <p className="text-gray-500 text-sm mt-4">
             Taller propio en Córdoba Capital · Atención humana de lunes a sábado
           </p>
@@ -2030,10 +2064,11 @@ export default function App() {
   }, []);
 
   return (
+    <LazyMotion features={loadMotionFeatures}>
     <div className="min-h-screen bg-[#02255b] font-sans text-white selection:bg-[#9fe43f] selection:text-[#02255b]">
       <AnimatePresence mode="wait">
         {profile === null ? (
-          <motion.div
+          <m.div
             key="selector"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -2042,9 +2077,9 @@ export default function App() {
           >
             <ProfileSelector onSelect={setProfile} />
             <FloatingWhatsApp />
-          </motion.div>
+          </m.div>
         ) : profile === "all" ? (
-          <motion.div
+          <m.div
             key="all"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -2071,9 +2106,9 @@ export default function App() {
             >
               ← Volver al inicio
             </button>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.div
+          <m.div
             key={profile}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -2081,9 +2116,10 @@ export default function App() {
             transition={{ duration: 0.3 }}
           >
             <ProfileFlow profileId={profile} onReset={() => setProfile(null)} />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
+    </LazyMotion>
   );
 }
