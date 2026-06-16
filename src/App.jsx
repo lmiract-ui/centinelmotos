@@ -29,6 +29,11 @@ import {
   Camera,
   PlayCircle,
   Star,
+  Cpu,
+  Package,
+  Route,
+  Compass,
+  Gem,
   AlertTriangle,
   Zap,
   Navigation,
@@ -46,6 +51,16 @@ const COLORS = {
 
 // Mensaje General Actualizado
 const WHATSAPP_LINK = "https://wa.me/5493516567060?text=Hola%20Centinel,%20quiero%20comunicarme%20con%20un%20asesor%20para%20conocer%20como%20proteger%20mi%20vehículo%20¿Me%20podrías%20comentar%20mas%20sobre%20el%20servicio?";
+
+// --- CONVERSION TRACKING (Meta Pixel) ---
+// Dispara el evento estándar "Lead" cuando alguien inicia contacto por WhatsApp.
+// El parámetro content_name permite ver en Meta QUÉ origen (perfil/sección)
+// genera los contactos, para optimizar la pauta hacia el público que más convierte.
+const trackLead = (source = "whatsapp") => {
+  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+    window.fbq("track", "Lead", { content_name: source, content_category: "whatsapp_click" });
+  }
+};
 
 // --- COMPONENTES ---
 
@@ -1036,6 +1051,7 @@ const PricingSection = () => {
                   href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(plan.message)}`}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-wa-source={`plan_${plan.id}`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`block w-full text-center font-bold py-3.5 rounded-xl transition-colors ${
@@ -1424,6 +1440,7 @@ const FloatingWhatsApp = () => (
     href={WHATSAPP_LINK}
     target="_blank"
     rel="noopener noreferrer"
+    data-wa-source="boton_flotante"
     initial={{ scale: 0 }}
     animate={{ scale: 1 }}
     transition={{ delay: 1, type: "spring" }}
@@ -1442,24 +1459,631 @@ const FloatingWhatsApp = () => (
   </motion.a>
 );
 
-// --- MAIN APP COMPONENT ---
-export default function App() {
+// ============================================================
+// EXPERIENCIA INTERACTIVA POR PERFIL (Meta Ads / mobile-first)
+// ============================================================
+// MESSAGE MATCH: editá los titulares de cada perfil acá para que
+// espejen el copy de tus anuncios de Meta. Un solo lugar, sin
+// tocar el resto del código.
+// "laburante" está terminado; "rider" y "fierrero" son BORRADOR.
+const PROFILES = {
+  laburante: {
+    kicker: "Para el que labura con la moto",
+    problemTitle: "Tu moto no es un lujo. Es tu fuente de laburo.",
+    problemText: "Si te la roban, no perdés solo la moto: perdés los repartos, los viajes y la plata de todos los días.",
+    agitateTitle: "Se la llevan en segundos. Recuperarla es una carrera contra el tiempo.",
+    agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Sin saber dónde está, la búsqueda arranca a ciegas — y cada día sin moto es un día sin ingresos. ¿Cuántos días te podés bancar sin tu herramienta de trabajo?",
+    solutionTitle: "Con Centinel, la frenás vos.",
+    solutionText: "Tu moto conectada a tu celular, las 24 horas.",
+    benefits: [
+      {
+        icon: PowerOff,
+        title: "Corte de corriente remoto",
+        desc: "¿Te la llevaron? La apagás desde el celular y no arranca más. Donde esté."
+      },
+      {
+        icon: AlertTriangle,
+        title: "Alerta al instante",
+        desc: "Si alguien la toca o la mueve, te suena el celular al segundo."
+      },
+      {
+        icon: Navigation,
+        title: "Recupero sin importar la zona",
+        desc: "La ves en el mapa en tiempo real y activamos el protocolo para ir a buscarla."
+      },
+    ],
+    ctaTitle: "Volvé a laburar tranquilo.",
+    ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
+    ctaButton: "Quiero proteger mi moto",
+    whatsappMessage: "Hola Centinel, laburo con mi moto y quiero protegerla. ¿Me contás cómo funciona el servicio?",
+  },
+  // BORRADOR — pendiente de aprobación
+  transporte: {
+    kicker: "Para el que va a todos lados en moto",
+    problemTitle: "Sin tu moto, tu día no funciona.",
+    problemText: "Al trabajo, a la facu, a donde sea: la moto es tu libertad de todos los días. Si te la roban, quedás a pata.",
+    agitateTitle: "Estacionada o en un semáforo: da igual.",
+    agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Algunos silenciosos, con la moto estacionada mientras estás adentro. Otros a plena luz, frenado en un semáforo. Unos segundos y no está más. ¿Cómo llegás mañana?",
+    solutionTitle: "Andá tranquilo. Centinel la cuida.",
+    solutionText: "Tu moto conectada a tu celular, las 24 horas.",
+    benefits: [
+      {
+        icon: AlertTriangle,
+        title: "Alerta al instante",
+        desc: "Si alguien la toca o la mueve mientras estás adentro, te suena el celular al segundo."
+      },
+      {
+        icon: PowerOff,
+        title: "Corte de corriente remoto",
+        desc: "¿Te la llevaron? La apagás desde el celular y no arranca más. Donde esté."
+      },
+      {
+        icon: Navigation,
+        title: "Recupero sin importar la zona",
+        desc: "La ves en el mapa en tiempo real y activamos el protocolo para ir a buscarla."
+      },
+    ],
+    ctaTitle: "Que nada te deje a pata.",
+    ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
+    ctaButton: "Quiero proteger mi moto",
+    whatsappMessage: "Hola Centinel, uso mi moto para moverme todos los días y quiero protegerla. ¿Me contás cómo funciona el servicio?",
+  },
+  // BORRADOR — pendiente de aprobación
+  rider: {
+    kicker: "Para el que sale a rodar",
+    problemTitle: "La ruta es tuya. El miedo, no.",
+    problemText: "Rodar mirando los espejos, pensando dónde la dejás en cada parada, te arruina la salida.",
+    agitateTitle: "No es solo una moto, y vos lo sabés.",
+    agitateText: "Rodar es de esas cosas que te devuelven a vos mismo: despejás, respirás, sentís la ruta. Por eso pesa tanto la idea de perderla. Y no hace falta salir todos los días para que pase: alcanza una vuelta. Lo que viene después son meses esperando al seguro, trámites, y domingos con ganas de arrancar y el garaje vacío. Cuidarla es cuidar eso que te hace bien.",
+    solutionTitle: "Rodá libre. Centinel la vigila.",
+    solutionText: "Tu moto conectada a tu celular, las 24 horas.",
+    benefits: [
+      {
+        icon: AlertTriangle,
+        title: "Alerta al instante",
+        desc: "Si alguien la toca o la mueve, te suena el celular al segundo. Vos disfrutá: ella avisa."
+      },
+      {
+        icon: MapPin,
+        title: "Ubicación en tiempo real",
+        desc: "La ves en el mapa desde cualquier lado, con historial de recorridos de hasta 6 meses."
+      },
+      {
+        icon: PowerOff,
+        title: "Corte de corriente remoto",
+        desc: "Si pasa lo peor, la apagás desde el celular y no arranca más."
+      },
+    ],
+    ctaTitle: "Salí a rodar sin mirar para atrás.",
+    ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
+    ctaButton: "Quiero rodar tranquilo",
+    whatsappMessage: "Hola Centinel, salgo a rodar con mi moto y quiero protegerla. ¿Me contás cómo funciona el servicio?",
+  },
+  // BORRADOR — pendiente de aprobación
+  fierrero: {
+    kicker: "Para el que tiene una joya",
+    problemTitle: "Una moto así no es una moto más.",
+    problemText: "Hay piezas, tiempo y cariño que ningún seguro te devuelve.",
+    agitateTitle: "Las motos cuidadas no se roban al azar: se eligen.",
+    agitateText: "Y si pasa, lo que define todo es el tiempo: cuanto antes sepas dónde está, más chances de recuperarla entera. A ciegas, la búsqueda se hace cuesta arriba.",
+    solutionTitle: "Protegela como la cuidás.",
+    solutionText: "Tu moto conectada a tu celular, las 24 horas.",
+    benefits: [
+      {
+        icon: AlertTriangle,
+        title: "Alerta al instante",
+        desc: "Si alguien la toca, la mueve o la enciende, te suena el celular al segundo."
+      },
+      {
+        icon: EyeOff,
+        title: "Instalación oculta indetectable",
+        desc: "Sin luces, sin sirenas, sin marcas. El ladrón no sabe que está siendo rastreado."
+      },
+      {
+        icon: PowerOff,
+        title: "Corte de corriente remoto",
+        desc: "La apagás desde el celular y no arranca más. Donde esté."
+      },
+    ],
+    ctaTitle: "Dormí tranquilo. Ella está vigilada.",
+    ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
+    ctaButton: "Quiero protegerla ya",
+    whatsappMessage: "Hola Centinel, tengo una moto que cuido mucho y quiero protegerla. ¿Me contás cómo funciona el servicio?",
+  },
+};
+
+// --- PANTALLA 1: SELECCIÓN DE PERFIL ---
+const ProfileSelector = ({ onSelect }) => {
+  // "Lock-on": al elegir, la tarjeta se fija como objetivo de radar antes de pasar al flujo
+  const [picked, setPicked] = useState(null);
+  const handlePick = (id) => {
+    if (picked) return;
+    setPicked(id);
+    setTimeout(() => onSelect(id), 750);
+  };
+
+  const options = [
+    { id: "laburante", icon: Package, phrase: "Laburo con mi moto todos los días" },
+    { id: "transporte", icon: Route, phrase: "Es mi transporte: me lleva a todos lados" },
+    { id: "rider", icon: Compass, phrase: "Salgo a rodar, es mi cable a tierra" },
+    { id: "fierrero", icon: Gem, phrase: "Tengo una moto que cuido como un tesoro" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#02255b] font-sans text-white selection:bg-[#9fe43f] selection:text-[#02255b]">
-      <Navbar />
-      <Hero />
-      <BrandMarquee />
-      <ProblemSolution />
-      <CutOffDetail />
-      <HardwareSpecs />
+    <section className="min-h-screen bg-[#02255b] flex flex-col px-6 py-5 relative overflow-hidden">
+      {/* Fondo sutil */}
+      <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob" />
+      <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob animation-delay-2000" />
+
+
+      <div className="max-w-md mx-auto w-full flex flex-col flex-1 justify-center relative z-10">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-4"
+        >
+          <span className="text-xl font-black tracking-tighter text-white">
+            CENTINEL <span className="text-[#9fe43f]">GPS</span>
+          </span>
+          <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase mt-1">
+            Seguridad satelital para tu moto · Córdoba
+          </p>
+        </motion.div>
+
+        {/* Pregunta */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="text-3xl md:text-4xl font-black text-white text-center mb-2 leading-tight"
+        >
+          ¿Cómo vivís <span className="text-[#9fe43f]">tu moto</span>?
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="text-gray-300 text-center mb-5 text-sm"
+        >
+          Elegí la que más se parezca a vos y te mostramos cómo protegerla.
+        </motion.p>
+
+        {/* Tarjetas de perfil */}
+        <div className="flex flex-col gap-2.5">
+          {options.map((opt, i) => (
+            <motion.button
+              key={opt.id}
+              initial={{ opacity: 0, y: 30 }}
+              animate={
+                picked === opt.id
+                  ? { opacity: 1, y: 0, scale: 1.03 }
+                  : picked
+                  ? { opacity: 0.25, y: 0, scale: 0.97 }
+                  : { opacity: 1, y: 0 }
+              }
+              transition={picked ? { duration: 0.3 } : { delay: 0.4 + i * 0.1 }}
+              whileHover={picked ? {} : { scale: 1.02 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => handlePick(opt.id)}
+              className={`w-full min-h-[64px] bg-[#011a42] border rounded-2xl px-4 py-3 flex items-center gap-3 text-left transition-colors group cursor-pointer ${
+                picked === opt.id
+                  ? "border-[#9fe43f] shadow-[0_0_25px_rgba(159,228,63,0.35)]"
+                  : "border-white/10 hover:border-[#9fe43f]/60"
+              }`}
+            >
+              {/* Ícono en contenedor estilizado */}
+              {(() => {
+                const Icon = opt.icon;
+                return (
+                  <span
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                      picked === opt.id
+                        ? "bg-[#9fe43f] text-[#02255b]"
+                        : "bg-[#9fe43f]/10 text-[#9fe43f] group-hover:bg-[#9fe43f]/20"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" aria-hidden="true" />
+                  </span>
+                );
+              })()}
+              <span className="flex-1 text-white font-bold text-[15px] leading-snug">
+                "{opt.phrase}"
+              </span>
+              {picked === opt.id ? (
+                <motion.span
+                  className="w-5 h-5 rounded-full border-2 border-[#9fe43f] border-t-transparent flex-shrink-0"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
+                  aria-hidden="true"
+                />
+              ) : (
+                <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-[#9fe43f] group-hover:translate-x-1 transition-all flex-shrink-0" aria-hidden="true" />
+              )}
+            </motion.button>
+          ))}
+        </div>
+
+        {/* Salida discreta / estado de localización */}
+        {picked ? (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-2 mx-auto min-h-[44px] flex items-center gap-2 text-[#9fe43f] text-sm font-bold"
+          >
+            <span className="w-2 h-2 bg-[#9fe43f] rounded-full animate-ping" aria-hidden="true" />
+            Localizando tu camino…
+          </motion.p>
+        ) : (
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.85 }}
+            onClick={() => onSelect("all")}
+            className="mt-2 mx-auto text-gray-400 hover:text-white text-sm underline underline-offset-4 min-h-[44px] px-4 cursor-pointer transition-colors"
+          >
+            Prefiero ver toda la info →
+          </motion.button>
+        )}
+
+        {/* Prueba social mínima */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-1 flex items-center justify-center gap-2 text-xs text-gray-400"
+        >
+          <span className="text-[#9fe43f]">★★★★★</span>
+          <span className="font-bold text-gray-300">+300 motos protegidas en Córdoba</span>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// Puntos de confianza técnica — compartidos por todos los perfiles
+const TRUST_POINTS = [
+  {
+    icon: Battery,
+    title: "No mata la batería",
+    desc: "Consumo ultra-bajo: hasta 50 días con la moto parada sin afectar el arranque."
+  },
+  {
+    icon: Wrench,
+    title: "Instalación profesional y poco invasiva",
+    desc: "En nuestro taller propio, sin tocar la electrónica original de tu moto."
+  },
+  {
+    icon: Cpu,
+    title: "Tecnología importada de primer mundo",
+    desc: "Porque entendemos que si falla el equipo, falla la confianza."
+  },
+  {
+    icon: EyeOff,
+    title: "100% oculto",
+    desc: "Sin luces ni sirenas. El que se la quiera llevar no sabe que está siendo rastreado."
+  },
+];
+
+// --- FLUJO PAS POR PERFIL ---
+const ProfileFlow = ({ profileId, onReset }) => {
+  const p = PROFILES[profileId];
+  const whatsappUrl = `https://wa.me/5493516567060?text=${encodeURIComponent(p.whatsappMessage)}`;
+
+  return (
+    <div className="bg-[#02255b]">
+      {/* Header simple del flujo */}
+      <header className="fixed top-0 w-full z-50 bg-[#02255b]/95 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-3xl mx-auto px-5 py-3 flex justify-between items-center">
+          <span className="text-lg font-black tracking-tighter text-white">
+            CENTINEL <span className="text-[#9fe43f]">GPS</span>
+          </span>
+          <button
+            onClick={onReset}
+            className="text-gray-300 hover:text-white text-xs font-bold uppercase tracking-wide border border-white/15 rounded-full px-4 min-h-[44px] cursor-pointer transition-colors"
+          >
+            ← Elegir de nuevo
+          </button>
+        </div>
+      </header>
+
+      {/* 1. PROBLEMA */}
+      <section className="pt-32 pb-16 px-6 text-center relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-10" />
+        <div className="max-w-2xl mx-auto relative z-10">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-block py-2 px-5 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs font-bold tracking-widest mb-8 uppercase"
+          >
+            {p.kicker}
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="text-4xl md:text-5xl font-black text-white leading-tight mb-6"
+          >
+            {p.problemTitle}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.35 }}
+            className="text-gray-300 text-lg md:text-xl leading-relaxed"
+          >
+            {p.problemText}
+          </motion.p>
+        </div>
+      </section>
+
+      {/* 2. AGITAR */}
+      <section className="py-16 px-6 bg-[#00102b] border-y border-white/5 text-center">
+        <div className="max-w-2xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6"
+          >
+            <AlertTriangle className="w-4 h-4" aria-hidden="true" /> El riesgo es real
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-black text-white mb-5"
+          >
+            {p.agitateTitle}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 text-lg leading-relaxed"
+          >
+            {p.agitateText}
+          </motion.p>
+        </div>
+      </section>
+
+      {/* 3. SOLUCIÓN */}
+      <section className="py-20 px-6 relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#9fe43f]/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="max-w-2xl mx-auto relative z-10">
+          <div className="text-center mb-12">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-block py-2 px-5 rounded-full bg-[#9fe43f] text-[#02255b] text-xs font-black tracking-widest mb-6 uppercase"
+            >
+              La solución
+            </motion.span>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-5xl font-black text-white mb-4"
+            >
+              {p.solutionTitle}
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-gray-300 text-lg"
+            >
+              {p.solutionText}
+            </motion.p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {p.benefits.map((b, i) => {
+              const Icon = b.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-[#011a42] border border-white/10 rounded-3xl p-6 flex gap-5 items-start"
+                >
+                  <div className="w-12 h-12 bg-[#9fe43f]/10 rounded-2xl flex items-center justify-center text-[#9fe43f] flex-shrink-0">
+                    <Icon className="w-6 h-6" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-lg mb-1">{b.title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">{b.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Confianza técnica (común a todos los perfiles) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12"
+          >
+            <p className="text-center text-gray-400 text-xs font-bold tracking-widest uppercase mb-5">
+              Sin letra chica
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {TRUST_POINTS.map((t, i) => {
+                const TIcon = t.icon;
+                return (
+                  <div
+                    key={i}
+                    className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-3 items-start"
+                  >
+                    <TIcon className="w-5 h-5 text-[#9fe43f] flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <div>
+                      <h4 className="text-white font-bold text-sm mb-0.5">{t.title}</h4>
+                      <p className="text-gray-400 text-xs leading-relaxed">{t.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* CTA intermedio */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-10 text-center"
+          >
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa-source={`perfil_${profileId}_solucion`}
+              className="inline-flex items-center justify-center gap-3 bg-[#9fe43f] text-[#02255b] font-black py-4 px-8 rounded-full text-lg min-h-[56px] shadow-[0_0_30px_rgba(159,228,63,0.25)] hover:bg-white transition-colors w-full md:w-auto"
+            >
+              {p.ctaButton}
+              <ArrowRight className="w-5 h-5" aria-hidden="true" />
+            </a>
+            <p className="text-gray-500 text-xs mt-3">
+              Te responde una persona del equipo, nunca un bot.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 4. PRUEBA SOCIAL */}
       <SocialProof />
+
+      {/* 5. PLANES */}
       <PricingSection />
-      <HowItWorks />
-      <StealthMode />
-      <TrustSection />
-      <FAQ />
+
+      {/* 6. CTA FINAL */}
+      <section className="py-20 px-6 text-center bg-[#011a42] border-t border-white/5">
+        <div className="max-w-xl mx-auto">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-5xl font-black text-white mb-4"
+          >
+            {p.ctaTitle}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-gray-400 text-lg mb-8"
+          >
+            {p.ctaSub}
+          </motion.p>
+          <motion.a
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-wa-source={`perfil_${profileId}_cta_final`}
+            className="inline-flex items-center justify-center gap-3 bg-[#9fe43f] text-[#02255b] font-black py-5 px-10 rounded-full text-xl min-h-[56px] shadow-[0_0_40px_rgba(159,228,63,0.3)] hover:bg-white transition-colors w-full md:w-auto"
+          >
+            {p.ctaButton}
+            <ArrowRight className="w-6 h-6" aria-hidden="true" />
+          </motion.a>
+          <p className="text-gray-500 text-sm mt-4">
+            Taller propio en Córdoba Capital · Atención humana de lunes a sábado
+          </p>
+        </div>
+      </section>
+
       <Footer />
       <FloatingWhatsApp />
+    </div>
+  );
+};
+
+// --- MAIN APP COMPONENT ---
+export default function App() {
+  // null = pantalla de selección | 'laburante'/'rider'/'fierrero' = flujo PAS | 'all' = landing completa
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [profile]);
+
+  // Tracking global: cualquier clic en un link de WhatsApp dispara el evento Lead.
+  // Capture phase (true) para registrarlo antes de que el navegador abra la pestaña.
+  useEffect(() => {
+    const handler = (e) => {
+      const link = e.target.closest(
+        'a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="whatsapp.com/send"]'
+      );
+      if (!link) return;
+      trackLead(link.getAttribute("data-wa-source") || "whatsapp_generico");
+    };
+    document.addEventListener("click", handler, true);
+    return () => document.removeEventListener("click", handler, true);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-[#02255b] font-sans text-white selection:bg-[#9fe43f] selection:text-[#02255b]">
+      <AnimatePresence mode="wait">
+        {profile === null ? (
+          <motion.div
+            key="selector"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ProfileSelector onSelect={setProfile} />
+            <FloatingWhatsApp />
+          </motion.div>
+        ) : profile === "all" ? (
+          <motion.div
+            key="all"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Navbar />
+            <Hero />
+            <BrandMarquee />
+            <ProblemSolution />
+            <CutOffDetail />
+            <HardwareSpecs />
+            <SocialProof />
+            <PricingSection />
+            <HowItWorks />
+            <StealthMode />
+            <TrustSection />
+            <FAQ />
+            <Footer />
+            <FloatingWhatsApp />
+            <button
+              onClick={() => setProfile(null)}
+              className="fixed bottom-6 left-6 z-50 bg-[#011a42]/90 backdrop-blur border border-white/20 text-white text-xs font-bold px-4 min-h-[44px] rounded-full shadow-lg hover:border-[#9fe43f] transition-colors cursor-pointer"
+            >
+              ← Volver al inicio
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={profile}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ProfileFlow profileId={profile} onReset={() => setProfile(null)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
