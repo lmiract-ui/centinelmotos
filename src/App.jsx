@@ -32,6 +32,7 @@ import {
   Route,
   Compass,
   Gem,
+  Users,
   AlertTriangle,
   Zap,
   Navigation,
@@ -1534,11 +1535,11 @@ const PROFILES = {
   // BORRADOR — pendiente de aprobación
   transporte: {
     kicker: "Para el que va a todos lados en moto",
-    problemTitle: "Sin tu moto, tu día no funciona.",
-    problemText: "Al trabajo, a la facu, a donde sea: la moto es tu libertad de todos los días. Si te la roban, quedás a pata.",
-    agitateTitle: "Estacionada o en un semáforo: da igual.",
-    agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Algunos silenciosos, con la moto estacionada mientras estás adentro. Otros a plena luz, frenado en un semáforo. Unos segundos y no está más. ¿Cómo llegás mañana?",
-    solutionTitle: "Andá tranquilo. Centinel la cuida.",
+    problemTitle: "Tu moto te ahorra tiempo y plata. Todos los días.",
+    problemText: "Te movés rápido, gastás monedas de nafta, llegás a todos lados. Hasta el día que no está y caés en la cuenta de cuánto dependías de ella.",
+    agitateTitle: "Reponerla cuesta una fortuna. Cuidarla, monedas.",
+    agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Si te la sacan, recuperarla depende de una sola cosa: saber dónde está al instante. El rastreo te sale por mes menos que un par de cargas de nafta. Comprarte otra moto, ni comparación.",
+    solutionTitle: "La cuenta cierra sola.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
     benefits: [
       {
@@ -1557,7 +1558,7 @@ const PROFILES = {
         desc: "La ves en el mapa en tiempo real y activamos el protocolo para ir a buscarla."
       },
     ],
-    ctaTitle: "Que nada te deje a pata.",
+    ctaTitle: "La inversión más obvia para tu moto.",
     ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
     ctaButton: "Quiero proteger mi moto",
     whatsappMessage: "Hola Centinel, uso mi moto para moverme todos los días y quiero protegerla. ¿Me contás cómo funciona el servicio?",
@@ -1566,29 +1567,29 @@ const PROFILES = {
   rider: {
     kicker: "Para el que sale a rodar",
     problemTitle: "La ruta es tuya. El miedo, no.",
-    problemText: "Rodar mirando los espejos, pensando dónde la dejás en cada parada, te arruina la salida.",
-    agitateTitle: "No es solo una moto, y vos lo sabés.",
-    agitateText: "Rodar es de esas cosas que te devuelven a vos mismo: despejás, respirás, sentís la ruta. Por eso pesa tanto la idea de perderla. Y no hace falta salir todos los días para que pase: alcanza una vuelta. Lo que viene después son meses esperando al seguro, trámites, y domingos con ganas de arrancar y el garaje vacío. Cuidarla es cuidar eso que te hace bien.",
-    solutionTitle: "Rodá libre. Centinel la vigila.",
+    problemText: "Salir a rodar es desconectar. Pero cuanto más lejos vas, más solo te sentís si algo pasa en el camino.",
+    agitateTitle: "Lejos de casa, ¿quién sabe por dónde andás?",
+    agitateText: "Una rodada larga, una picada con amigos, una parada en el bar del camino. Disfrutás distinto cuando tu gente puede ver por dónde vas en tiempo real, y sabés que la moto avisa si alguien la toca mientras la dejás un rato sola.",
+    solutionTitle: "Tu compañero de ruta invisible.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
     benefits: [
       {
-        icon: AlertTriangle,
-        title: "Alerta al instante",
-        desc: "Si alguien la toca o la mueve, te suena el celular al segundo. Vos disfrutá: ella avisa."
+        icon: Users,
+        title: "Tu gente sabe dónde andás",
+        desc: "Compartí tu ubicación en vivo con quien quieras. Si salís a la ruta, tu familia te sigue el viaje desde el celular."
       },
       {
         icon: MapPin,
-        title: "Ubicación en tiempo real",
-        desc: "La ves en el mapa desde cualquier lado, con historial de recorridos de hasta 6 meses."
+        title: "Ubicación y recorridos",
+        desc: "La ves en el mapa en tiempo real y guardás el historial de tus salidas de hasta 6 meses."
       },
       {
-        icon: PowerOff,
-        title: "Corte de corriente remoto",
-        desc: "Si pasa lo peor, la apagás desde el celular y no arranca más."
+        icon: AlertTriangle,
+        title: "Cuidada en cada parada",
+        desc: <>Si alguien la toca mientras parás, te avisa al instante. <strong className="text-[#9fe43f] font-semibold">Y si hace falta, la apagás desde el celular.</strong></>
       },
     ],
-    ctaTitle: "Salí a rodar sin mirar para atrás.",
+    ctaTitle: "Salí a rodar. Nunca más solo.",
     ctaSub: "Instalación en 60-90 minutos en nuestro taller de Córdoba. Salís protegido el mismo día.",
     ctaButton: "Quiero rodar tranquilo",
     whatsappMessage: "Hola Centinel, salgo a rodar con mi moto y quiero protegerla. ¿Me contás cómo funciona el servicio?",
