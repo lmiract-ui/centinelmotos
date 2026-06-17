@@ -18,6 +18,10 @@ export const SOCIAL_PROOF = {
     },
     {
       "type": "image",
+      "src": "/clientes/laburante/laburante-7.webp"
+    },
+    {
+      "type": "image",
       "src": "/clientes/laburante/laburante-3.webp"
     },
     {
@@ -31,10 +35,6 @@ export const SOCIAL_PROOF = {
     {
       "type": "image",
       "src": "/clientes/laburante/laburante-6.webp"
-    },
-    {
-      "type": "image",
-      "src": "/clientes/laburante/laburante-7.webp"
     }
   ],
   "transporte": [
