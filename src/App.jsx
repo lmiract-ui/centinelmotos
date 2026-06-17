@@ -1503,7 +1503,7 @@ const FloatingWhatsApp = () => (
       initial={{ opacity: 0, y: 8, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 2.5, type: "spring", stiffness: 300 }}
-      className="bg-[#011a42]/70 backdrop-blur-md text-white/90 text-xs font-semibold px-3 py-1.5 rounded-full border border-white/10 shadow-md whitespace-nowrap"
+      className="text-white text-xs font-semibold px-1.5 py-1 whitespace-nowrap drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
     >
       Hablanos
     </m.a>
