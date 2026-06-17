@@ -11,6 +11,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Grilla de mapa sutil (refuerza la identidad GPS sin competir con el contenido) */
+.bg-grid-soft {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
 /* --- Animaciones globales --- */
 
 /* Marquee de marcas (lista duplicada x2 → -50% = bucle perfecto) */

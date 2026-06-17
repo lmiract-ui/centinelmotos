@@ -110,15 +110,34 @@ const Navbar = () => {
   return (
     <nav 
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-[#02255b]/95 backdrop-blur-md shadow-lg py-4" 
+        scrolled
+          ? "bg-gradient-to-b from-[#00102b]/95 to-[#02255b]/90 backdrop-blur-md shadow-lg py-4"
           : "bg-transparent py-6"
       }`}
     >
+      {/* Línea de luz lima inferior (solo cuando la barra tiene fondo) */}
+      {scrolled && (
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#9fe43f]/60 to-transparent shadow-[0_0_8px_rgba(159,228,63,0.35)]" />
+      )}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center w-full">
         
         {/* 1. LOGO (Izquierda) */}
-        <a href="#" onClick={(e) => handleNavClick(e, '#inicio')} className="flex items-center gap-2 group cursor-pointer z-50 flex-shrink-0">
+        <a href="#" onClick={(e) => handleNavClick(e, '#inicio')} className="flex items-center gap-2.5 group cursor-pointer z-50 flex-shrink-0">
+          <span className="relative flex items-center justify-center flex-shrink-0">
+            <m.span
+              className="absolute h-9 w-9 rounded-full border border-[#9fe43f]/40"
+              animate={{ scale: [0.7, 2], opacity: [0.45, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeOut" }}
+              aria-hidden="true"
+            />
+            <m.span
+              className="absolute h-9 w-9 rounded-full border border-[#9fe43f]/40"
+              animate={{ scale: [0.7, 2], opacity: [0.45, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeOut", delay: 1.5 }}
+              aria-hidden="true"
+            />
+            <img src="/centinel-logo.svg" alt="" aria-hidden="true" className="h-8 md:h-9 w-auto relative z-10" />
+          </span>
           <span className="text-xl md:text-2xl font-black tracking-tighter text-white whitespace-nowrap">
             CENTINEL <span className="text-[#9fe43f] group-hover:text-white transition-colors">GPS</span>
           </span>
@@ -1312,16 +1331,16 @@ const FAQ = () => {
       answer: "La suscripción se paga de forma mensual mediante el procesador de pago de mercado pago, el pago mensual sirve para mantener el servicio activo y la moto conectada.",
     },
     {
+      question: "¿Y si prefiero comprar el equipo?",
+      answer: "Podés. Con el plan de Pago Único el equipo GPS queda 100% tuyo: lo abonás una sola vez (con opción de cuotas) y a partir de ahí solo mantenés una tarifa mensual reducida para los servidores y el chip de datos satelitales que mantienen tu moto conectada.",
+    },
+    {
       question: "¿Descarga la batería de la moto?",
       answer: "No. El equipo Hercules Lite tiene un modo de ultra-bajo consumo y una batería interna que le permite estar hasta 50 días en stand-by sin afectar el arranque de tu moto.",
     },
     {
       question: "¿El corte de motor puede dañar mi moto?",
-      answer: "No. El relay se instala en circuitos preparados para la interrupción (como la bomba de combustible o ignición). No afecta la mecánica ni la electrónica original si se instala profesionalmente.",
-    },
-    {
-      question: "¿Tengo que comprar el equipo GPS?",
-      answer: "No. Accedés al servicio con el equipo en Comodato (préstamo de uso). No hace falta que compres ni pagues por el dispositivo, el cual tiene un costo de mercado alto. Nosotros te lo facilitamos bonificado al 100% para que solo abones el servicio.",
+      answer: "No. El relay se instala en un circuito preparado para la interrupción, sin afectar la mecánica ni la electrónica original de tu moto. El método de instalación se mantiene en reserva por tu seguridad.",
     },
   ];
 
@@ -1387,8 +1406,11 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                 {/* Columna 1: Marca */}
                 <div className="space-y-4">
-                    <span className="text-2xl font-black tracking-tighter text-white block mb-2">
-                        CENTINEL <span className="text-[#9fe43f]">GPS</span>
+                    <span className="flex items-center gap-2.5 mb-2">
+                        <img src="/centinel-logo.svg" alt="" aria-hidden="true" className="h-9 w-auto" />
+                        <span className="text-2xl font-black tracking-tighter text-white">
+                            CENTINEL <span className="text-[#9fe43f]">GPS</span>
+                        </span>
                     </span>
                     <p className="text-gray-400 leading-relaxed max-w-xs">
                         Seguridad vehicular y rastreo satelital en Córdoba. Tecnología certificada para proteger lo que más querés.
@@ -1471,6 +1493,20 @@ const Footer = () => {
 
 // 10. WHATSAPP BUTTON & APP COMPONENT
 const FloatingWhatsApp = () => (
+  <div className="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-2">
+    {/* Etiqueta sutil "Hablanos" */}
+    <m.a
+      href={WHATSAPP_LINK}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-wa-source="etiqueta_hablanos"
+      initial={{ opacity: 0, y: 8, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: 2.5, type: "spring", stiffness: 300 }}
+      className="bg-white text-[#02255b] text-xs font-bold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap"
+    >
+      Hablanos
+    </m.a>
   <m.a
     href={WHATSAPP_LINK}
     target="_blank"
@@ -1480,10 +1516,10 @@ const FloatingWhatsApp = () => (
     animate={{ scale: 1 }}
     transition={{ delay: 1, type: "spring" }}
     whileHover={{ scale: 1.1 }}
-    className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] flex items-center justify-center border-4 border-[#02255b]"
+    className="bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] flex items-center justify-center border-4 border-[#02255b]"
     aria-label="Contactar por WhatsApp"
   >
-    <svg 
+    <svg
       xmlns="http://www.w3.org/2000/svg" 
       viewBox="0 0 24 24" 
       fill="currentColor" 
@@ -1492,6 +1528,7 @@ const FloatingWhatsApp = () => (
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
     </svg>
   </m.a>
+  </div>
 );
 
 // ============================================================
@@ -1504,7 +1541,7 @@ const FloatingWhatsApp = () => (
 const PROFILES = {
   laburante: {
     kicker: "Para el que labura con la moto",
-    problemTitle: "Tu moto no es un lujo. Es tu fuente de laburo.",
+    problemTitle: "Tu moto es tu socia. La que nunca falta.",
     problemText: "Si te la roban, no perdés solo la moto: perdés los repartos, los viajes y la plata de todos los días.",
     agitateTitle: "Se la llevan en segundos. Recuperarla es una carrera contra el tiempo.",
     agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Sin saber dónde está, la búsqueda arranca a ciegas — y cada día sin moto es un día sin ingresos. ¿Cuántos días te podés bancar sin tu herramienta de trabajo?",
@@ -1645,7 +1682,7 @@ const ProfileSelector = ({ onSelect }) => {
   ];
 
   return (
-    <section className="min-h-screen bg-[#02255b] flex flex-col px-6 py-5 relative overflow-hidden">
+    <section className="min-h-screen bg-[#02255b] bg-grid-soft flex flex-col px-6 py-5 relative overflow-hidden">
       {/* Fondo sutil */}
       <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob" />
       <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob animation-delay-2000" />
@@ -1658,8 +1695,11 @@ const ProfileSelector = ({ onSelect }) => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-4"
         >
-          <span className="text-xl font-black tracking-tighter text-white">
-            CENTINEL <span className="text-[#9fe43f]">GPS</span>
+          <span className="flex items-center justify-center gap-2.5">
+            <img src="/centinel-logo.svg" alt="" aria-hidden="true" className="h-9 w-auto" />
+            <span className="text-xl font-black tracking-tighter text-white">
+              CENTINEL <span className="text-[#9fe43f]">GPS</span>
+            </span>
           </span>
           <p className="text-gray-400 text-[10px] font-bold tracking-widest uppercase mt-1">
             Seguridad satelital para tu moto · Córdoba
@@ -1808,10 +1848,28 @@ const ProfileFlow = ({ profileId, onReset }) => {
   return (
     <div className="bg-[#02255b]">
       {/* Header simple del flujo */}
-      <header className="fixed top-0 w-full z-50 bg-[#02255b]/95 backdrop-blur-md border-b border-white/5">
+      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-[#00102b]/95 to-[#02255b]/90 backdrop-blur-md">
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#9fe43f]/60 to-transparent shadow-[0_0_8px_rgba(159,228,63,0.35)]" />
         <div className="max-w-3xl mx-auto px-5 py-3 flex justify-between items-center">
-          <span className="text-lg font-black tracking-tighter text-white">
-            CENTINEL <span className="text-[#9fe43f]">GPS</span>
+          <span className="flex items-center gap-2">
+            <span className="relative flex items-center justify-center flex-shrink-0">
+              <m.span
+                className="absolute h-8 w-8 rounded-full border border-[#9fe43f]/40"
+                animate={{ scale: [0.7, 2], opacity: [0.45, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeOut" }}
+                aria-hidden="true"
+              />
+              <m.span
+                className="absolute h-8 w-8 rounded-full border border-[#9fe43f]/40"
+                animate={{ scale: [0.7, 2], opacity: [0.45, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeOut", delay: 1.5 }}
+                aria-hidden="true"
+              />
+              <img src="/centinel-logo.svg" alt="" aria-hidden="true" className="h-7 w-auto relative z-10" />
+            </span>
+            <span className="text-lg font-black tracking-tighter text-white">
+              CENTINEL <span className="text-[#9fe43f]">GPS</span>
+            </span>
           </span>
           <button
             onClick={onReset}
@@ -1823,7 +1881,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
       </header>
 
       {/* 1. PROBLEMA */}
-      <section className="pt-32 pb-16 px-6 text-center relative overflow-hidden">
+      <section className="pt-32 pb-16 px-6 text-center relative overflow-hidden bg-grid-soft">
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-10" />
         <div className="max-w-2xl mx-auto relative z-10">
           <m.span
@@ -1884,7 +1942,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
       </section>
 
       {/* 3. SOLUCIÓN */}
-      <section className="py-20 px-6 relative overflow-hidden">
+      <section className="py-20 px-6 relative overflow-hidden bg-grid-soft">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#9fe43f]/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="max-w-2xl mx-auto relative z-10">
           <div className="text-center mb-12">
@@ -2027,6 +2085,9 @@ const ProfileFlow = ({ profileId, onReset }) => {
 
       {/* 5. PLANES */}
       <PricingSection />
+
+      {/* 5.5 PREGUNTAS FRECUENTES */}
+      <FAQ />
 
       {/* 6. CTA FINAL */}
       <section className="py-20 px-6 text-center bg-[#011a42] border-t border-white/5">
