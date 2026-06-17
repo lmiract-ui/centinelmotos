@@ -1990,6 +1990,37 @@ const ProfileFlow = ({ profileId, onReset }) => {
         </div>
       </section>
 
+      {/* 3.5 DEMO DE LA APP */}
+      <section className="py-16 px-6 bg-[#00102b] border-t border-white/5">
+        <div className="max-w-md mx-auto text-center">
+          <m.span
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-block py-2 px-5 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs font-bold tracking-widest mb-5 uppercase"
+          >
+            La app
+          </m.span>
+          <m.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl md:text-4xl font-black text-white mb-8"
+          >
+            Mirá la app por dentro
+          </m.h2>
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mx-auto w-full max-w-[280px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#011a42]"
+            style={{ aspectRatio: "9 / 16" }}
+          >
+            <AutoplayVideo src="/video/app-demo.mp4" poster="/video/app-demo-poster.webp" />
+          </m.div>
+        </div>
+      </section>
+
       {/* 4. PRUEBA SOCIAL */}
       <SocialProof profileId={profileId} />
 
