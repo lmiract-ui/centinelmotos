@@ -5,17 +5,57 @@
 /* --- Base --- */
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+/* Tipografía display para todos los títulos */
+h1, h2, h3, .font-display {
+  font-family: 'Poppins', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* --- Estética "cristal" premium (estilo financiados) --- */
+.glass-card {
+  background-image: linear-gradient(145deg, rgba(22, 30, 52, 0.85), rgba(10, 15, 28, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 48px -18px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.glass-card-hover {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.glass-card-hover:hover {
+  border-color: rgba(159, 228, 63, 0.45);
+  box-shadow: 0 22px 56px -18px rgba(0, 0, 0, 0.65), 0 0 26px -6px rgba(159, 228, 63, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+}
+/* Sombra suave y difusa para elementos elevados */
+.shadow-soft {
+  box-shadow: 0 20px 50px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* Gradiente de acento celeste -> lima (para CTAs destacados) */
+.gradient-accent {
+  background-image: linear-gradient(100deg, #7fd4ff 0%, #bdf25a 55%, #9fe43f 100%);
+}
+.text-gradient-accent {
+  background-image: linear-gradient(100deg, #7fd4ff 0%, #bdf25a 50%, #9fe43f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* Grilla de mapa sutil (refuerza la identidad GPS sin competir con el contenido) */
 .bg-grid-soft {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(159, 228, 63, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(159, 228, 63, 0.035) 1px, transparent 1px);
   background-size: 46px 46px;
 }
 

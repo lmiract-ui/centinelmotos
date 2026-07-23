@@ -46,8 +46,8 @@ const loadMotionFeatures = () => import('./lib/motionFeatures').then((res) => re
 
 // --- CONFIGURACIÓN Y CONSTANTES ---
 const COLORS = {
-  blue: "#02255b",
-  darkBlue: "#011a42",
+  blue: "#0a0f1c",
+  darkBlue: "#080d18",
   lime: "#9fe43f",
   white: "#ffffff",
 };
@@ -111,7 +111,7 @@ const Navbar = () => {
     <nav 
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-gradient-to-b from-[#00102b]/95 to-[#02255b]/90 backdrop-blur-md shadow-lg py-4"
+          ? "bg-gradient-to-b from-[#05080f]/95 to-[#0a0f1c]/90 backdrop-blur-md shadow-lg py-4"
           : "bg-transparent py-6"
       }`}
     >
@@ -165,8 +165,8 @@ const Navbar = () => {
             rel="noopener noreferrer"
             className={`px-5 py-2.5 rounded-full font-bold text-xs lg:text-sm transition-all whitespace-nowrap ${
               scrolled 
-                ? "bg-[#9fe43f] text-[#02255b] hover:bg-white" 
-                : "border-2 border-white text-white hover:bg-white hover:text-[#02255b]"
+                ? "bg-[#9fe43f] text-[#0a0f1c] hover:bg-white" 
+                : "border-2 border-white text-white hover:bg-white hover:text-[#0a0f1c]"
             }`}
           >
             HABLÁ CON UN ASESOR
@@ -193,7 +193,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#011a42] border-b border-white/10 overflow-hidden absolute top-full left-0 w-full shadow-2xl"
+            className="md:hidden bg-[#080d18] border-b border-white/10 overflow-hidden absolute top-full left-0 w-full shadow-2xl"
           >
             <div className="flex flex-col p-6 space-y-4">
               {navLinks.map((link) => (
@@ -239,7 +239,7 @@ const Hero = () => {
   };
 
   return (
-    <section id="inicio" className="relative w-full pt-32 pb-20 md:pt-48 md:pb-32 px-6 bg-[#02255b] overflow-hidden min-h-[95vh] flex flex-col justify-center">
+    <section id="inicio" className="relative w-full pt-32 pb-20 md:pt-48 md:pb-32 px-6 bg-[#0a0f1c] overflow-hidden min-h-[95vh] flex flex-col justify-center">
       
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -253,8 +253,8 @@ const Hero = () => {
           decoding="async"
           onError={(e) => e.target.style.display = 'none'}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#02255b]/90 via-[#02255b]/70 to-[#02255b]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#02255b]/40 to-[#02255b]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0f1c]/90 via-[#0a0f1c]/70 to-[#0a0f1c]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#0a0f1c]/40 to-[#0a0f1c]" />
       </div>
 
       {/* Animated Blobs */}
@@ -296,7 +296,7 @@ const Hero = () => {
             transition={{ delay: 0.2 }}
             className="flex flex-wrap justify-center items-center gap-3 mb-8"
           >
-            <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f] text-[#02255b] text-xs md:text-sm font-black tracking-widest uppercase shadow-[0_0_20px_rgba(159,228,63,0.3)]">
+            <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f] text-[#0a0f1c] text-xs md:text-sm font-black tracking-widest uppercase shadow-[0_0_20px_rgba(159,228,63,0.3)]">
               ★ +300 motos protegidas en Córdoba
             </span>
             <span className="inline-block py-2 px-6 rounded-full bg-[#9fe43f]/10 border border-[#9fe43f]/40 text-[#9fe43f] text-xs md:text-sm font-bold tracking-widest uppercase backdrop-blur-md shadow-[0_0_20px_rgba(159,228,63,0.1)]">
@@ -371,7 +371,7 @@ const Hero = () => {
               onClick={handleScrollToFeatures}
               whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.5)" }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 bg-white text-[#02255b] font-black py-5 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all cursor-pointer group"
+              className="inline-flex items-center gap-3 bg-white text-[#0a0f1c] font-black py-5 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all cursor-pointer group"
             >
               Desliza para conocer más
               <m.div
@@ -388,7 +388,7 @@ const Hero = () => {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 bg-transparent border-2 border-white text-white font-black py-5 px-10 rounded-full text-lg hover:bg-white hover:text-[#02255b] transition-all cursor-pointer group"
+              className="inline-flex items-center gap-3 bg-transparent border-2 border-white text-white font-black py-5 px-10 rounded-full text-lg hover:bg-white hover:text-[#0a0f1c] transition-all cursor-pointer group"
             >
               Hablar con un asesor
               <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
@@ -418,10 +418,10 @@ const BrandMarquee = () => {
   ];
 
   return (
-    <section className="w-full bg-[#011a42] border-y border-white/5 py-10 overflow-hidden">
+    <section className="w-full bg-[#080d18] border-y border-white/5 py-10 overflow-hidden">
       {/* Marquee */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#011a42] via-transparent to-[#011a42] z-10 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#080d18] via-transparent to-[#080d18] z-10 pointer-events-none"></div>
         <div className="flex w-max animate-marquee">
           {[...brands, ...brands].map((brand, index) => (
             <div key={index} className="flex items-center gap-3 mx-7 md:mx-10 flex-shrink-0">
@@ -457,7 +457,7 @@ const BrandMarquee = () => {
 // 3. PROBLEM / SOLUTION - ESTILO "BENTO GRID" (MEJORADO CON GRÁFICOS VIVOS)
 const ProblemSolution = () => {
   return (
-    <section id="beneficios" className="py-24 px-6 bg-[#011a42] relative scroll-mt-20 overflow-hidden">
+    <section id="beneficios" className="py-24 px-6 bg-[#080d18] relative scroll-mt-20 overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <m.div
@@ -520,7 +520,7 @@ const ProblemSolution = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="md:col-span-2 row-span-2 bg-[#02255b] rounded-[2.5rem] p-8 md:p-10 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+                className="md:col-span-2 row-span-2 bg-[#0a0f1c] rounded-[2.5rem] p-8 md:p-10 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
             >
                 <div className="absolute top-0 right-0 w-80 h-80 bg-[#9fe43f]/10 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none"></div>
                 
@@ -541,7 +541,7 @@ const ProblemSolution = () => {
                     </div>
                     
                     {/* Visual Live Map (RADAR MODE) */}
-                    <div className="mt-8 w-full h-48 md:h-56 bg-[#00102b] rounded-2xl border border-white/10 relative overflow-hidden shadow-inner flex items-center justify-center">
+                    <div className="mt-8 w-full h-48 md:h-56 bg-[#05080f] rounded-2xl border border-white/10 relative overflow-hidden shadow-inner flex items-center justify-center">
                          {/* Map Grid Background */}
                          <div className="absolute inset-0 opacity-30" 
                               style={{ 
@@ -589,10 +589,10 @@ const ProblemSolution = () => {
                          </div>
                          
                          <div className="absolute bottom-4 left-4 flex gap-2 z-20">
-                            <span className="bg-[#02255b]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-mono border border-white/10 flex items-center gap-1">
+                            <span className="bg-[#0a0f1c]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-white font-mono border border-white/10 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> GPS + LBS
                             </span>
-                            <span className="bg-[#02255b]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-[#9fe43f] font-mono border border-[#9fe43f]/30">4G LTE</span>
+                            <span className="bg-[#0a0f1c]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] text-[#9fe43f] font-mono border border-[#9fe43f]/30">4G LTE</span>
                          </div>
                     </div>
                 </div>
@@ -603,7 +603,7 @@ const ProblemSolution = () => {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
                  transition={{ delay: 0.1 }}
-                 className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg flex flex-col"
+                 className="md:col-span-1 bg-[#0a0f1c] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg flex flex-col"
             >
                  <m.div 
                     className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-[#9fe43f]"
@@ -627,7 +627,7 @@ const ProblemSolution = () => {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
                  transition={{ delay: 0.2 }}
-                 className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+                 className="md:col-span-1 bg-[#0a0f1c] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
             >
                  <div className="flex items-center justify-between mb-6">
                      <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-[#9fe43f]">
@@ -655,7 +655,7 @@ const ProblemSolution = () => {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
                  transition={{ delay: 0.1 }}
-                 className="md:col-span-1 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+                 className="md:col-span-1 bg-[#0a0f1c] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
             >
                  <div className="relative w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 text-[#9fe43f]">
                     <m.div
@@ -677,7 +677,7 @@ const ProblemSolution = () => {
                  whileInView={{ opacity: 1, y: 0 }}
                  viewport={{ once: true }}
                  transition={{ delay: 0.2 }}
-                 className="md:col-span-2 bg-[#02255b] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
+                 className="md:col-span-2 bg-[#0a0f1c] rounded-[2.5rem] p-8 border border-white/10 relative overflow-hidden group hover:border-[#9fe43f]/50 transition-all shadow-lg"
             >
                  <div className="absolute top-0 right-0 w-60 h-60 bg-[#9fe43f]/10 rounded-full blur-[80px] -mr-16 -mt-16 pointer-events-none"></div>
                  <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
@@ -701,7 +701,7 @@ const ProblemSolution = () => {
 // --- NUEVA SECCIÓN: DETALLE DE CORTE DE CORRIENTE ---
 const CutOffDetail = () => {
   return (
-    <section id="seguridad" className="py-24 px-6 bg-[#02255b] relative">
+    <section id="seguridad" className="py-24 px-6 bg-[#0a0f1c] relative">
       <div className="max-w-4xl mx-auto text-center mb-12">
         <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6">
             <Zap className="w-4 h-4" /> Función de Alta Seguridad
@@ -717,7 +717,7 @@ const CutOffDetail = () => {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Card 1: Qué es */}
-        <div className="bg-[#011a42] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
+        <div className="bg-[#080d18] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
             <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-[#9fe43f]">1</span>
                 ¿Cómo funciona?
@@ -729,7 +729,7 @@ const CutOffDetail = () => {
         </div>
 
         {/* Card 2: Seguridad */}
-        <div className="bg-[#011a42] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
+        <div className="bg-[#080d18] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
             <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-[#9fe43f]">2</span>
                 ¿Es seguro?
@@ -741,7 +741,7 @@ const CutOffDetail = () => {
         </div>
 
         {/* Card 3: Objetivo */}
-        <div className="bg-[#011a42] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
+        <div className="bg-[#080d18] p-8 rounded-3xl border border-white/5 hover:border-[#9fe43f]/30 transition-colors">
             <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <span className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-[#9fe43f]">3</span>
                 Objetivo Real
@@ -758,7 +758,7 @@ const CutOffDetail = () => {
 // --- NUEVA SECCIÓN: HARDWARE SPECS (HERCULES LITE) ---
 const HardwareSpecs = () => {
   return (
-    <section id="hardware" className="py-20 px-6 bg-[#00102b] relative overflow-hidden border-t border-white/5">
+    <section id="hardware" className="py-20 px-6 bg-[#05080f] relative overflow-hidden border-t border-white/5">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
         
         {/* Visual de Hardware: Certificaciones internacionales */}
@@ -779,7 +779,7 @@ const HardwareSpecs = () => {
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="absolute -top-4 -right-4 bg-[#9fe43f] text-[#02255b] text-xs font-black px-4 py-2 rounded-lg shadow-lg uppercase"
+                    className="absolute -top-4 -right-4 bg-[#9fe43f] text-[#0a0f1c] text-xs font-black px-4 py-2 rounded-lg shadow-lg uppercase"
                 >
                     4G LTE CERTIFICADO
                 </m.div>
@@ -900,7 +900,7 @@ const SocialProof = ({ profileId }) => {
   if (!media || media.length === 0) return null;
 
   return (
-    <section id="clientes" className="py-24 px-6 bg-[#011a42] border-t border-white/5 scroll-mt-20 overflow-hidden">
+    <section id="clientes" className="pt-20 pb-12 px-6 bg-[#080d18] border-t border-white/5 scroll-mt-20 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <m.div
           initial={{ opacity: 0, y: 20 }}
@@ -933,7 +933,7 @@ const SocialProof = ({ profileId }) => {
               transition={{ delay: Math.min(i, 5) * 0.05 }}
               className="snap-center flex-shrink-0 w-64 md:w-72"
             >
-              <div className="relative h-80 md:h-96 rounded-3xl overflow-hidden border border-white/10 bg-[#02255b]">
+              <div className="relative h-80 md:h-96 rounded-3xl overflow-hidden border border-white/10 bg-[#0a0f1c]">
                 {item.type === "image" ? (
                   <img
                     src={item.src}
@@ -946,7 +946,7 @@ const SocialProof = ({ profileId }) => {
                   <AutoplayVideo src={item.src} poster={item.poster} />
                 )}
                 {item.caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#011a42]/95 to-transparent p-4 pt-10">
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#080d18]/95 to-transparent p-4 pt-10">
                     <p className="text-white text-sm font-bold">{item.caption}</p>
                   </div>
                 )}
@@ -1009,7 +1009,7 @@ const PricingSection = () => {
   const filteredPlans = plans.filter(p => p.type === billingCycle);
 
   return (
-    <section id="planes" className="py-24 px-6 bg-[#02255b] relative overflow-hidden scroll-mt-20">
+    <section id="planes" className="pt-12 pb-24 px-6 bg-[#0a0f1c] relative overflow-hidden scroll-mt-20">
       <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -1022,13 +1022,13 @@ const PricingSection = () => {
           </h2>
           
           <div className="flex justify-center mb-8">
-            <div className="bg-[#011a42] p-1.5 rounded-full border border-white/10 inline-flex relative gap-2">
+            <div className="bg-[#080d18] p-1.5 rounded-full border border-white/10 inline-flex relative gap-2">
                 {['monthly', 'unico'].map((cycle) => (
                     <button
                         key={cycle}
                         onClick={() => setBillingCycle(cycle)}
                         className={`relative z-10 px-6 py-2 rounded-full text-sm font-bold transition-colors ${
-                            billingCycle === cycle ? 'text-[#02255b]' : 'text-gray-400 hover:text-white'
+                            billingCycle === cycle ? 'text-[#0a0f1c]' : 'text-gray-400 hover:text-white'
                         }`}
                     >
                         {cycle === 'monthly' ? 'Pago Mensual' : 'Pago Único'}
@@ -1056,12 +1056,12 @@ const PricingSection = () => {
                 transition={{ duration: 0.3 }}
                 className={`relative w-full md:max-w-sm rounded-[2rem] p-8 border-2 transition-all duration-300 ${
                   plan.highlight 
-                    ? "bg-[#032d6e] border-[#9fe43f] shadow-[0_0_30px_rgba(159,228,63,0.1)] z-10" 
-                    : "bg-[#011a42] border-white/10 hover:border-[#9fe43f] hover:shadow-[0_0_20px_rgba(159,228,63,0.2)]"
+                    ? "bg-[#10172a] border-[#9fe43f] shadow-[0_0_30px_rgba(159,228,63,0.1)] z-10" 
+                    : "bg-[#080d18] border-white/10 hover:border-[#9fe43f] hover:shadow-[0_0_20px_rgba(159,228,63,0.2)]"
                 }`}
               >
                 {plan.badge && (
-                  <div className="absolute -top-4 left-0 right-0 mx-auto w-fit bg-[#9fe43f] text-[#02255b] font-black py-1 px-4 rounded-full text-xs uppercase tracking-wider shadow-lg">
+                  <div className="absolute -top-4 left-0 right-0 mx-auto w-fit bg-[#9fe43f] text-[#0a0f1c] font-black py-1 px-4 rounded-full text-xs uppercase tracking-wider shadow-lg">
                     {plan.badge}
                   </div>
                 )}
@@ -1110,8 +1110,8 @@ const PricingSection = () => {
                   whileTap={{ scale: 0.98 }}
                   className={`block w-full text-center font-bold py-3.5 rounded-xl transition-colors ${
                     plan.highlight
-                      ? "bg-white text-[#02255b] hover:bg-gray-100 shadow-lg"
-                      : "bg-[#02255b] text-white border border-white/20 hover:bg-[#033482]"
+                      ? "bg-white text-[#0a0f1c] hover:bg-gray-100 shadow-lg"
+                      : "bg-[#0a0f1c] text-white border border-white/20 hover:bg-[#131c33]"
                   }`}
                 >
                   {plan.cta}
@@ -1129,24 +1129,24 @@ const PricingSection = () => {
 const HowItWorks = () => {
   const steps = [
     {
-      icon: <CalendarDays className="w-8 h-8 text-[#02255b]" />,
+      icon: <CalendarDays className="w-8 h-8 text-[#0a0f1c]" />,
       title: "1. Reservá Turno",
       desc: "Contáctanos por WhatsApp. Coordinamos día y hora para tu instalación."
     },
     {
-      icon: <Wrench className="w-8 h-8 text-[#02255b]" />,
+      icon: <Wrench className="w-8 h-8 text-[#0a0f1c]" />,
       title: "2. Instalación Pro",
       desc: "Venís a nuestro taller en el Centro. En 60-90 min tu moto sale protegida."
     },
     {
-      icon: <Smartphone className="w-8 h-8 text-[#02255b]" />,
+      icon: <Smartphone className="w-8 h-8 text-[#0a0f1c]" />,
       title: "3. Descargá y Listo",
       desc: "Te enseñamos a usar la App. Ya tenés el control total en tu celular."
     }
   ];
 
   return (
-    <section id="como-funciona" className="py-24 px-6 bg-[#011a42] border-t border-white/5 scroll-mt-20">
+    <section id="como-funciona" className="py-24 px-6 bg-[#080d18] border-t border-white/5 scroll-mt-20">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
@@ -1156,11 +1156,11 @@ const HowItWorks = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-          <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-1 bg-[#02255b] border-t border-white/10 z-0"></div>
+          <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-1 bg-[#0a0f1c] border-t border-white/10 z-0"></div>
 
           {steps.map((step, index) => (
             <div key={index} className="relative z-10 flex flex-col items-center text-center">
-              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(159,228,63,0.2)] mb-6 border-4 border-[#02255b] group transition-transform hover:scale-110">
+              <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(159,228,63,0.2)] mb-6 border-4 border-[#0a0f1c] group transition-transform hover:scale-110">
                 <div className="bg-[#9fe43f] w-full h-full rounded-full absolute opacity-0 group-hover:opacity-20 transition-opacity"></div>
                 {step.icon}
               </div>
@@ -1177,7 +1177,7 @@ const HowItWorks = () => {
 // 6. MODO STEALTH
 const StealthMode = () => {
   return (
-    <section className="py-24 px-6 bg-[#00102b] border-t border-white/5 relative overflow-hidden">
+    <section className="py-24 px-6 bg-[#05080f] border-t border-white/5 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#9fe43f]/5 rounded-full blur-[100px] pointer-events-none"></div>
       
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
@@ -1230,22 +1230,22 @@ const StealthMode = () => {
           </ul>
         </div>
 
-        <div className="relative h-[400px] md:h-[500px] bg-[#011a42] rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center group shadow-2xl">
+        <div className="relative h-[400px] md:h-[500px] bg-[#080d18] rounded-3xl border border-white/10 overflow-hidden flex items-center justify-center group shadow-2xl">
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#9fe43f 1px, transparent 1px), linear-gradient(90deg, #9fe43f 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
           <div className="relative z-10 flex flex-col items-center">
              <div className="relative">
                 <div className="absolute inset-0 bg-[#9fe43f] blur-3xl opacity-20 animate-pulse"></div>
                 <ShieldCheck className="w-32 h-32 text-white/90 drop-shadow-[0_0_15px_rgba(159,228,63,0.5)]" />
-                <div className="absolute -bottom-4 -right-4 bg-[#02255b] border border-[#9fe43f] text-[#9fe43f] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                <div className="absolute -bottom-4 -right-4 bg-[#0a0f1c] border border-[#9fe43f] text-[#9fe43f] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
                    <Lock className="w-3 h-3" /> SECURE
                 </div>
              </div>
              <div className="absolute top-0 w-full h-1 bg-[#9fe43f]/50 blur-sm animate-[scan_3s_ease-in-out_infinite]"></div>
           </div>
-          <div className="absolute top-10 left-10 bg-[#02255b]/80 backdrop-blur border border-white/10 px-4 py-2 rounded-lg text-xs text-gray-300 shadow-lg">
+          <div className="absolute top-10 left-10 bg-[#0a0f1c]/80 backdrop-blur border border-white/10 px-4 py-2 rounded-lg text-xs text-gray-300 shadow-lg">
              <span className="text-[#9fe43f]">●</span> Signal: ENCRYPTED
           </div>
-          <div className="absolute bottom-10 right-10 bg-[#02255b]/80 backdrop-blur border border-white/10 px-4 py-2 rounded-lg text-xs text-gray-300 shadow-lg">
+          <div className="absolute bottom-10 right-10 bg-[#0a0f1c]/80 backdrop-blur border border-white/10 px-4 py-2 rounded-lg text-xs text-gray-300 shadow-lg">
              <span className="text-[#9fe43f]">●</span> Status: HIDDEN
           </div>
         </div>
@@ -1257,7 +1257,7 @@ const StealthMode = () => {
 // 7. TRUST SECTION
 const TrustSection = () => {
   return (
-    <section id="taller" className="py-24 px-6 bg-[#02255b] scroll-mt-20 relative overflow-hidden">
+    <section id="taller" className="py-24 px-6 bg-[#0a0f1c] scroll-mt-20 relative overflow-hidden">
         {/* Background Workshop */}
         <div className="absolute inset-0 z-0">
              <img
@@ -1270,7 +1270,7 @@ const TrustSection = () => {
               decoding="async"
               onError={(e) => e.target.style.display = 'none'}
             />
-             <div className="absolute inset-0 bg-gradient-to-r from-[#02255b] via-[#02255b]/95 to-[#02255b]/90" />
+             <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1c] via-[#0a0f1c]/95 to-[#0a0f1c]/90" />
         </div>
         
       <div className="max-w-6xl mx-auto relative z-10">
@@ -1345,13 +1345,13 @@ const FAQ = () => {
   ];
 
   return (
-    <section id="faq" className="py-24 px-6 bg-[#011a42] scroll-mt-20">
+    <section id="faq" className="py-24 px-6 bg-[#080d18] scroll-mt-20">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-white">Preguntas Frecuentes</h2>
         
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <div key={index} className="border border-white/10 rounded-2xl overflow-hidden bg-[#02255b]">
+            <div key={index} className="border border-white/10 rounded-2xl overflow-hidden bg-[#0a0f1c]">
               <button
                 onClick={() => setActiveIndex(activeIndex === index ? null : index)}
                 className="w-full p-6 flex items-center justify-between text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9fe43f] hover:bg-white/5 transition-colors"
@@ -1402,7 +1402,7 @@ const Footer = () => {
     };
 
     return (
-        <footer className="bg-[#00102b] border-t border-white/10 pt-16 pb-10 px-6 text-sm">
+        <footer className="bg-[#05080f] border-t border-white/10 pt-16 pb-10 px-6 text-sm">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                 {/* Columna 1: Marca */}
                 <div className="space-y-4">
@@ -1516,7 +1516,7 @@ const FloatingWhatsApp = () => (
     animate={{ scale: 1 }}
     transition={{ delay: 1, type: "spring" }}
     whileHover={{ scale: 1.1 }}
-    className="bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] flex items-center justify-center border-4 border-[#02255b]"
+    className="bg-[#25D366] text-white p-4 rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] flex items-center justify-center border-4 border-[#0a0f1c]"
     aria-label="Contactar por WhatsApp"
   >
     <svg
@@ -1543,7 +1543,7 @@ const PROFILES = {
     kicker: "Para el que labura con la moto",
     problemTitle: "Tu moto es tu socia. La que nunca falta.",
     problemText: "Si te la roban, no perdés solo la moto: perdés los repartos, los viajes y la plata de todos los días.",
-    agitateTitle: "Se la llevan en segundos. Recuperarla es una carrera contra el tiempo.",
+    agitateTitle: <>Se la llevan en segundos. <span className="text-[#9fe43f]">Recuperarla es una carrera contra el tiempo.</span></>,
     agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Sin saber dónde está, la búsqueda arranca a ciegas — y cada día sin moto es un día sin ingresos. ¿Cuántos días te podés bancar sin tu herramienta de trabajo?",
     solutionTitle: "Con Centinel, la frenás vos.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
@@ -1574,7 +1574,7 @@ const PROFILES = {
     kicker: "Para el que va a todos lados en moto",
     problemTitle: "Tu moto te ahorra tiempo y plata. Todos los días.",
     problemText: "Te movés rápido, gastás monedas de nafta, llegás a todos lados. Hasta el día que no está y caés en la cuenta de cuánto dependías de ella.",
-    agitateTitle: "Reponerla cuesta una fortuna. Cuidarla, monedas.",
+    agitateTitle: <>Reponerla cuesta una fortuna. <span className="text-[#9fe43f]">Cuidarla, monedas.</span></>,
     agitateText: "En Córdoba se denuncian más de 25 robos de motos por día. Si te la sacan, recuperarla depende de una sola cosa: saber dónde está al instante. El rastreo te sale por mes menos que un par de cargas de nafta. Comprarte otra moto, ni comparación.",
     solutionTitle: "La cuenta cierra sola.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
@@ -1605,7 +1605,7 @@ const PROFILES = {
     kicker: "Para el que sale a rodar",
     problemTitle: "La ruta es tuya. El miedo, no.",
     problemText: "Salir a rodar es desconectar. Pero cuanto más lejos vas, más solo te sentís si algo pasa en el camino.",
-    agitateTitle: "Lejos de casa, ¿quién sabe por dónde andás?",
+    agitateTitle: <>Lejos de casa, <span className="text-[#9fe43f]">¿quién sabe por dónde andás?</span></>,
     agitateText: "Una rodada larga, una picada con amigos, una parada en el bar del camino. Disfrutás distinto cuando tu gente puede ver por dónde vas en tiempo real, y sabés que la moto avisa si alguien la toca mientras la dejás un rato sola.",
     solutionTitle: "Tu compañero de ruta invisible.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
@@ -1636,7 +1636,7 @@ const PROFILES = {
     kicker: "Para el que tiene una joya",
     problemTitle: "Una moto así no es una moto más.",
     problemText: "Hay piezas, tiempo y cariño que ningún seguro te devuelve.",
-    agitateTitle: "Las motos cuidadas no se roban al azar: se eligen.",
+    agitateTitle: <>Las motos cuidadas no se roban al azar: <span className="text-[#9fe43f]">se eligen.</span></>,
     agitateText: "Y si pasa, lo que define todo es el tiempo: cuanto antes sepas dónde está, más chances de recuperarla entera. A ciegas, la búsqueda se hace cuesta arriba.",
     solutionTitle: "Protegela como la cuidás.",
     solutionText: "Tu moto conectada a tu celular, las 24 horas.",
@@ -1682,7 +1682,7 @@ const ProfileSelector = ({ onSelect }) => {
   ];
 
   return (
-    <section className="min-h-screen bg-[#02255b] bg-grid-soft flex flex-col px-6 py-5 relative overflow-hidden">
+    <section className="min-h-screen bg-[#0a0f1c] bg-grid-soft flex flex-col px-6 py-5 relative overflow-hidden">
       {/* Fondo sutil */}
       <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob" />
       <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-[#9fe43f] rounded-full mix-blend-overlay filter blur-[100px] opacity-15 animate-blob animation-delay-2000" />
@@ -1741,10 +1741,10 @@ const ProfileSelector = ({ onSelect }) => {
               whileHover={picked ? {} : { scale: 1.02 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => handlePick(opt.id)}
-              className={`w-full min-h-[64px] bg-[#011a42] border rounded-2xl px-4 py-3 flex items-center gap-3 text-left transition-colors group cursor-pointer ${
+              className={`w-full min-h-[64px] glass-card rounded-2xl px-4 py-3 flex items-center gap-3 text-left group cursor-pointer transition-all ${
                 picked === opt.id
-                  ? "border-[#9fe43f] shadow-[0_0_25px_rgba(159,228,63,0.35)]"
-                  : "border-white/10 hover:border-[#9fe43f]/60"
+                  ? "!border-[#9fe43f]/80 shadow-[0_0_28px_rgba(159,228,63,0.35)]"
+                  : "glass-card-hover"
               }`}
             >
               {/* Ícono en contenedor estilizado */}
@@ -1754,7 +1754,7 @@ const ProfileSelector = ({ onSelect }) => {
                   <span
                     className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                       picked === opt.id
-                        ? "bg-[#9fe43f] text-[#02255b]"
+                        ? "bg-[#9fe43f] text-[#0a0f1c]"
                         : "bg-[#9fe43f]/10 text-[#9fe43f] group-hover:bg-[#9fe43f]/20"
                     }`}
                   >
@@ -1846,9 +1846,9 @@ const ProfileFlow = ({ profileId, onReset }) => {
   const whatsappUrl = WHATSAPP_LINK;
 
   return (
-    <div className="bg-[#02255b]">
+    <div className="bg-[#0a0f1c]">
       {/* Header simple del flujo */}
-      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-[#00102b]/95 to-[#02255b]/90 backdrop-blur-md">
+      <header className="fixed top-0 w-full z-50 bg-gradient-to-b from-[#05080f]/95 to-[#0a0f1c]/90 backdrop-blur-md">
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#9fe43f]/60 to-transparent shadow-[0_0_8px_rgba(159,228,63,0.35)]" />
         <div className="max-w-3xl mx-auto px-5 py-3 flex justify-between items-center">
           <span className="flex items-center gap-2">
@@ -1911,7 +1911,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
       </section>
 
       {/* 2. AGITAR */}
-      <section className="py-16 px-6 bg-[#00102b] border-y border-white/5 text-center">
+      <section className="py-16 px-6 bg-[#05080f] border-y border-white/5 text-center">
         <div className="max-w-2xl mx-auto">
           <m.div
             initial={{ opacity: 0 }}
@@ -1950,7 +1950,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-block py-2 px-5 rounded-full bg-[#9fe43f] text-[#02255b] text-xs font-black tracking-widest mb-6 uppercase"
+              className="inline-block py-2 px-5 rounded-full bg-[#9fe43f] text-[#0a0f1c] text-xs font-black tracking-widest mb-6 uppercase"
             >
               La solución
             </m.span>
@@ -1958,7 +1958,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl md:text-5xl font-black text-white mb-4"
+              className="text-3xl md:text-5xl font-black text-gradient-accent mb-4"
             >
               {p.solutionTitle}
             </m.h2>
@@ -1982,7 +1982,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-[#011a42] border border-white/10 rounded-3xl p-6 flex gap-5 items-start"
+                  className="glass-card glass-card-hover rounded-3xl p-6 flex gap-5 items-start"
                 >
                   <div className="w-12 h-12 bg-[#9fe43f]/10 rounded-2xl flex items-center justify-center text-[#9fe43f] flex-shrink-0">
                     <Icon className="w-6 h-6" aria-hidden="true" />
@@ -2012,7 +2012,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
                 return (
                   <div
                     key={i}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-4 flex gap-3 items-start"
+                    className="glass-card rounded-2xl p-4 flex gap-3 items-start"
                   >
                     <TIcon className="w-5 h-5 text-[#9fe43f] flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
@@ -2037,7 +2037,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
               target="_blank"
               rel="noopener noreferrer"
               data-wa-source={`perfil_${profileId}_solucion`}
-              className="inline-flex items-center justify-center gap-3 bg-[#9fe43f] text-[#02255b] font-black py-4 px-8 rounded-full text-lg min-h-[56px] shadow-[0_0_30px_rgba(159,228,63,0.25)] hover:bg-white transition-colors w-full md:w-auto"
+              className="inline-flex items-center justify-center gap-3 gradient-accent text-[#05080f] font-black py-4 px-8 rounded-full text-lg min-h-[56px] shadow-[0_10px_30px_-6px_rgba(159,228,63,0.4)] hover:brightness-110 transition-all w-full md:w-auto"
             >
               {p.ctaButton}
               <ArrowRight className="w-5 h-5" aria-hidden="true" />
@@ -2050,7 +2050,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
       </section>
 
       {/* 3.5 DEMO DE LA APP */}
-      <section className="py-16 px-6 bg-[#00102b] border-t border-white/5">
+      <section className="py-16 px-6 bg-[#05080f] border-t border-white/5">
         <div className="max-w-md mx-auto text-center">
           <m.span
             initial={{ opacity: 0, scale: 0.9 }}
@@ -2072,7 +2072,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mx-auto w-full max-w-[280px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#011a42]"
+            className="mx-auto w-full max-w-[280px] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#080d18]"
             style={{ aspectRatio: "9 / 16" }}
           >
             <AutoplayVideo src="/video/app-demo.mp4" poster="/video/app-demo-poster.webp" />
@@ -2090,7 +2090,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
       <FAQ />
 
       {/* 6. CTA FINAL */}
-      <section className="py-20 px-6 text-center bg-[#011a42] border-t border-white/5">
+      <section className="py-20 px-6 text-center bg-[#080d18] border-t border-white/5">
         <div className="max-w-xl mx-auto">
           <m.h2
             initial={{ opacity: 0, y: 20 }}
@@ -2116,7 +2116,7 @@ const ProfileFlow = ({ profileId, onReset }) => {
             target="_blank"
             rel="noopener noreferrer"
             data-wa-source={`perfil_${profileId}_cta_final`}
-            className="inline-flex items-center justify-center gap-3 bg-[#9fe43f] text-[#02255b] font-black py-5 px-10 rounded-full text-xl min-h-[56px] shadow-[0_0_40px_rgba(159,228,63,0.3)] hover:bg-white transition-colors w-full md:w-auto"
+            className="inline-flex items-center justify-center gap-3 gradient-accent text-[#05080f] font-black py-5 px-10 rounded-full text-xl min-h-[56px] shadow-[0_12px_40px_-8px_rgba(159,228,63,0.45)] hover:brightness-110 transition-all w-full md:w-auto"
           >
             {p.ctaButton}
             <ArrowRight className="w-6 h-6" aria-hidden="true" />
@@ -2158,7 +2158,7 @@ export default function App() {
 
   return (
     <LazyMotion features={loadMotionFeatures}>
-    <div className="min-h-screen bg-[#02255b] font-sans text-white selection:bg-[#9fe43f] selection:text-[#02255b]">
+    <div className="min-h-screen bg-[#0a0f1c] font-sans text-white selection:bg-[#9fe43f] selection:text-[#0a0f1c]">
       <AnimatePresence mode="wait">
         {profile === null ? (
           <m.div
@@ -2195,7 +2195,7 @@ export default function App() {
             <FloatingWhatsApp />
             <button
               onClick={() => setProfile(null)}
-              className="fixed bottom-6 left-6 z-50 bg-[#011a42]/90 backdrop-blur border border-white/20 text-white text-xs font-bold px-4 min-h-[44px] rounded-full shadow-lg hover:border-[#9fe43f] transition-colors cursor-pointer"
+              className="fixed bottom-6 left-6 z-50 bg-[#080d18]/90 backdrop-blur border border-white/20 text-white text-xs font-bold px-4 min-h-[44px] rounded-full shadow-lg hover:border-[#9fe43f] transition-colors cursor-pointer"
             >
               ← Volver al inicio
             </button>
